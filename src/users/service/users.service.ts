@@ -12,15 +12,18 @@ export class UsersService {
   ) {}
 
   async createUser(signUpRequestDto: SignUpRequestDto) {
+    const user = signUpRequestDto.toUserEntity();
+
+    await this.usersRepository.checkEmailDuplicated(user.email);
+
     const address = signUpRequestDto.toAddressEntity();
     const newAddress = await this.addressRepository.create(address);
 
-    const user = signUpRequestDto.toUserEntity();
     user.address = newAddress;
     user.password = await this.hashPassword(user.password);
 
     const newUser = await this.usersRepository.create(user);
-    console.log(newUser);
+
     return newUser.id;
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Address } from 'src/entities/address.entity';
@@ -13,10 +13,26 @@ export class UsersRepository {
   ) {}
 
   async create(userInfo) {
-    if (!userInfo.address) {
-      throw new Error('주소 정보가 없습니다.');
-    }
-
     return this.usersRepository.save(userInfo);
+  }
+
+  async checkEmailDuplicated(email: string) {
+    const result = await this.usersRepository.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    if (result) throw new BadRequestException('이메일이 중복됩니다.');
+
+    return;
+  }
+
+  async findUserByEmailForLogIn(userEmail: string) {
+    const user = await this.usersRepository.findOneBy({ email: userEmail });
+
+    if (!user) throw new Error('유저가 존재하지 않습니다!');
+
+    return user;
   }
 }
