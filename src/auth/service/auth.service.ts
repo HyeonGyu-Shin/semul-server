@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LogInRequestDto } from 'src/users/dto/logInRequestDto';
 import { UsersRepository } from 'src/users/repository/users.repository';
 import * as bcrypt from 'bcrypt';
@@ -14,7 +14,12 @@ export class AuthService {
   async jwtLogIn(data: LogInRequestDto) {
     const { email, password } = data;
 
-    const user = await this.usersRepository.findUserByEmailForLogIn(email);
+    const user = await this.usersRepository.findOneByEmail(email);
+
+    if (!user)
+      throw new UnauthorizedException(
+        '이메일 또는 비밀번호가 일치하지 않습니다.',
+      );
 
     await this.comparePassword(password, user.password);
 
@@ -29,7 +34,7 @@ export class AuthService {
     const isMatch = await bcrypt.compare(passowrdFromClient, passwordFromDb);
 
     if (!isMatch)
-      throw new BadRequestException(
+      throw new UnauthorizedException(
         '이메일 또는 비밀번호가 일치하지 않습니다.',
       );
 

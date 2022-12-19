@@ -12,27 +12,11 @@ export class UsersRepository {
     private readonly addressRepository: Repository<Address>,
   ) {}
 
-  async create(userInfo) {
+  async create(userInfo: User) {
     return this.usersRepository.save(userInfo);
   }
 
-  async checkEmailDuplicated(email: string) {
-    const result = await this.usersRepository.findOne({
-      where: {
-        email: email,
-      },
-    });
-
-    if (result) throw new BadRequestException('이메일이 중복됩니다.');
-
-    return;
-  }
-
-  async findUserByEmailForLogIn(userEmail: string) {
-    const user = await this.usersRepository.findOneBy({ email: userEmail });
-
-    if (!user) throw new Error('유저가 존재하지 않습니다!');
-
-    return user;
+  async findOneByEmail(email: string) {
+    return await this.usersRepository.findOne({ where: { email } });
   }
 }

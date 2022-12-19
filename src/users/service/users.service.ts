@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { AddressRepository } from 'src/address/repository/address.repository';
 import { SignUpRequestDto } from '../dto/signUpRequestDto';
 import * as bcrypt from 'bcrypt';
@@ -13,11 +17,18 @@ export class UsersService {
 
   async createUser(signUpRequestDto: SignUpRequestDto) {
     const user = signUpRequestDto.toUserEntity();
-
-    await this.usersRepository.checkEmailDuplicated(user.email);
-
     const address = signUpRequestDto.toAddressEntity();
+
+    const foundUser = await this.usersRepository.findOneByEmail(user.email);
+
+    if (foundUser) throw new BadRequestException('중복된 이메일입니다.');
+
     const newAddress = await this.addressRepository.create(address);
+
+    if (!newAddress)
+      throw new InternalServerErrorException(
+        '주소가 제대로 생성되지 않았습니다.',
+      );
 
     user.address = newAddress;
     user.password = await this.hashPassword(user.password);
