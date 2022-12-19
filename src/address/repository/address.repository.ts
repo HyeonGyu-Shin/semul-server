@@ -10,13 +10,7 @@ export class AddressRepository {
     private readonly addressRepository: Repository<Address>,
   ) {}
 
-  async create(addressInfo) {
-    const address: Promise<Address> | null = await this.addressRepository.save(
-      addressInfo,
-    );
-
-    if (!address) throw new Error('DB에 자료가 생성되지 않았습니다.');
-
-    return address;
+  async create(addressInfo: Address) {
+    return await this.addressRepository.save(addressInfo);
   }
 }
