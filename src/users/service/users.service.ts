@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AddressRepository } from 'src/address/repository/address.repository';
 import { SignUpRequestDto } from '../dto/signUpRequestDto';
@@ -41,5 +42,12 @@ export class UsersService {
   async hashPassword(password: string) {
     const saltOrRounds = 10;
     return await bcrypt.hash(password, saltOrRounds);
+  }
+
+  async getUserInfo(userId, currentUser) {
+    if (userId !== currentUser.id)
+      throw new UnauthorizedException('다른 유저의 정보에 접근했습니다.');
+
+    return currentUser;
   }
 }

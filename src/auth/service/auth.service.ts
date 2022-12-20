@@ -30,6 +30,12 @@ export class AuthService {
     };
   }
 
+  async validateUser(userEmail) {
+    const user = await this.usersRepository.findOneByEmail(userEmail);
+
+    return user;
+  }
+
   private async comparePassword(passowrdFromClient, passwordFromDb) {
     const isMatch = await bcrypt.compare(passowrdFromClient, passwordFromDb);
 
