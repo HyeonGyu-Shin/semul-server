@@ -1,17 +1,8 @@
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { CommonEntity } from './common.entity';
 
 @Entity()
-export class Product {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Product extends CommonEntity {
   @Column()
   name: string;
 
@@ -20,13 +11,4 @@ export class Product {
 
   @Column()
   category: string;
-
-  @CreateDateColumn()
-  createdDateTime: Date;
-
-  @UpdateDateColumn()
-  updatedDateTime: Date;
-
-  @DeleteDateColumn()
-  deletedDateTime: Date;
 }
