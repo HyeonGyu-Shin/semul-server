@@ -13,7 +13,7 @@ export class UsersRepository {
   ) {}
 
   async create(userInfo: User) {
-    return this.usersRepository.save(userInfo);
+    return await this.usersRepository.save(userInfo);
   }
 
   async findOneByEmail(email: string) {

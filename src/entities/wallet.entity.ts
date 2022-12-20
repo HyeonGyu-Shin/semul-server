@@ -11,6 +11,14 @@ export class Wallet extends CommonEntity {
   chargeMethod: string;
 
   @OneToOne(() => User, (user) => user.wallet)
-  @JoinColumn()
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
+
+  static from(money: number, chargeMethod = 'card') {
+    const wallet = new Wallet();
+    wallet.money = money;
+    wallet.chargeMethod = chargeMethod;
+
+    return wallet;
+  }
 }
