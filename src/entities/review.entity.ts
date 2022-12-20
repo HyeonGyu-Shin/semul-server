@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { CommonEntity } from './common.entity';
 import { Laundry } from './laundry.entity';
+import { Order } from './order.entity';
 
 @Entity()
 export class Review extends CommonEntity {
@@ -10,6 +11,10 @@ export class Review extends CommonEntity {
   @Column({ type: 'text' })
   reviewText: string;
 
+  @OneToOne(() => Order, (order) => order.review)
+  order: Order;
+
   @ManyToOne(() => Laundry, (laundry) => laundry.reviews)
+  @JoinColumn()
   laundry: Laundry;
 }
