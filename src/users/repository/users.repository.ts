@@ -19,4 +19,8 @@ export class UsersRepository {
   async findOneByEmail(email: string) {
     return await this.usersRepository.findOne({ where: { email } });
   }
+
+  async deleteOne(userId: string) {
+    return await this.usersRepository.softDelete(userId);
+  }
 }

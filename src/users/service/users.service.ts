@@ -39,15 +39,12 @@ export class UsersService {
     return newUser.id;
   }
 
+  async deleteUser(userId: string) {
+    return this.usersRepository.deleteOne(userId);
+  }
+
   async hashPassword(password: string) {
     const saltOrRounds = 10;
     return await bcrypt.hash(password, saltOrRounds);
-  }
-
-  async getUserInfo(userId, currentUser) {
-    if (userId !== currentUser.id)
-      throw new UnauthorizedException('다른 유저의 정보에 접근했습니다.');
-
-    return currentUser;
   }
 }

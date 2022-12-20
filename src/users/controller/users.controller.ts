@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -37,5 +38,12 @@ export class UsersController {
   async findOne(@Param('id') userId, @Req() req) {
     this.authService.compareUserId(userId, req.user.id);
     return req.user;
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  async deleteOne(@Param('id') userId, @Req() req) {
+    this.authService.compareUserId(userId, req.user.id);
+    return this.usersService.deleteUser(userId);
   }
 }
