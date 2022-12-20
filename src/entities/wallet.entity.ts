@@ -14,7 +14,7 @@ export class Wallet extends CommonEntity {
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
 
-  static from(money: number, chargeMethod = 'card') {
+  static createEntityInstance(money = Number(0), chargeMethod = 'card') {
     const wallet = new Wallet();
     wallet.money = money;
     wallet.chargeMethod = chargeMethod;

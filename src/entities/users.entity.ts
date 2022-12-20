@@ -35,7 +35,7 @@ export class User extends CommonEntity {
   @OneToMany(() => Order, (order) => order.user)
   order: Order[];
 
-  static from(
+  static createEntityInstance(
     email: string,
     password: string,
     name: string,
