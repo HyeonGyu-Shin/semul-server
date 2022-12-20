@@ -7,8 +7,8 @@ import { CreateProductDto } from '../dto/create-product.dto';
 export class ProductsService {
   constructor(private productsRepository: ProductsRepository) {}
 
-  async create(productData: CreateProductDto) {
-    await this.productsRepository.save(productData);
+  create(productData: CreateProductDto) {
+    this.productsRepository.save(productData);
   }
 
   findAll(): Promise<Product[]> {
@@ -25,7 +25,7 @@ export class ProductsService {
     return Product;
   }
 
-  async findByCategory(category: string): Promise<Product[]> {
-    return await this.productsRepository.findByCategory(category);
+  findByCategory(category: string): Promise<Product[]> {
+    return this.productsRepository.findByCategory(category);
   }
 }
