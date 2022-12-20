@@ -36,6 +36,12 @@ export class AuthService {
     return user;
   }
 
+  compareUserId(paramId: string, currentUserId) {
+    if (paramId !== currentUserId)
+      throw new UnauthorizedException('다른 유저의 정보에 접근했습니다.');
+    return;
+  }
+
   private async comparePassword(passowrdFromClient, passwordFromDb) {
     const isMatch = await bcrypt.compare(passowrdFromClient, passwordFromDb);
 
