@@ -1,7 +1,8 @@
-import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Address } from './address.entity';
 import { CommonEntity } from './common.entity';
 import { Laundry } from './laundry.entity';
+import { Order } from './order.entity';
 import { Wallet } from './wallet.entity';
 
 @Entity()
@@ -30,6 +31,9 @@ export class User extends CommonEntity {
 
   @OneToOne(() => Laundry, (laundry) => laundry.user)
   laundry: Laundry;
+
+  @OneToMany(() => Order, (order) => order.user)
+  order: Order[];
 
   static from(
     email: string,
