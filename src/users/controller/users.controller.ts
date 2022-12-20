@@ -35,6 +35,7 @@ export class UsersController {
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') userId, @Req() req) {
-    return this.usersService.getUserInfo(userId, req.user);
+    this.authService.compareUserId(userId, req.user.id);
+    return req.user;
   }
 }
