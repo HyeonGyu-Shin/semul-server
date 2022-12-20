@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseIntPipe,
   Patch,
@@ -25,13 +26,29 @@ export class WalletsController {
     return this.walletService.createWallet(req.user);
   }
 
+  @Get(':id')
+  async showMoney(@Param('id') userId: string, @Req() req) {
+    this.authService.compareUserId(userId, req.user.id);
+    return this.walletService.showMoney(req.user);
+  }
+
   @Patch('/charge/:id')
   async chargeMoney(
-    @Body('money', ParseIntPipe) money: number,
+    @Body('plusMoney', ParseIntPipe) plusMoney: number,
     @Param('id') userId: string,
     @Req() req,
   ) {
     this.authService.compareUserId(userId, req.user.id);
-    return this.walletService.chargeMoney(req.user, money);
+    return this.walletService.chargeMoney(req.user, plusMoney);
+  }
+
+  @Patch(':id')
+  async reduceMoney(
+    @Body('minusMoney', ParseIntPipe) minusMoney: number,
+    @Param('id') userId: string,
+    @Req() req,
+  ) {
+    this.authService.compareUserId(userId, req.user.id);
+    return this.walletService.reduceMoney(req.user, minusMoney);
   }
 }
