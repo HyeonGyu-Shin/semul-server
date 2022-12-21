@@ -11,8 +11,8 @@ export class OrderProductsService {
     private orderProductsRepository: OrderProductsRepository,
   ) {}
 
-  async create(order: Order & CreateOrderDto) {
-    order.products.forEach(async (product) => {
+  async create(orderData: CreateOrderDto) {
+    orderData.products.forEach(async (product) => {
       const { name, price } = await this.productsRepository.findOneBy({
         id: product['id'],
       });
@@ -21,7 +21,7 @@ export class OrderProductsService {
         productName: name,
         price: price,
         qty: product['qty'],
-        order: order,
+        order: orderData,
       });
     });
   }
