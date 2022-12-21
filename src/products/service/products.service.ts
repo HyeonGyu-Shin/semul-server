@@ -7,8 +7,10 @@ import { CreateProductDto } from '../dto/create-product.dto';
 export class ProductsService {
   constructor(private productsRepository: ProductsRepository) {}
 
-  create(productData: CreateProductDto) {
-    this.productsRepository.save(productData);
+  async create(productData: CreateProductDto[]) {
+    const product = await this.productsRepository.save(productData);
+
+    return product;
   }
 
   findAll(): Promise<Product[]> {
