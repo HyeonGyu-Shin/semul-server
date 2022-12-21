@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Address } from 'src/entities/address.entity';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 @Injectable()
 export class AddressRepository {
@@ -10,7 +10,11 @@ export class AddressRepository {
     private readonly addressRepository: Repository<Address>,
   ) {}
 
-  async create(addressInfo: Address) {
-    return await this.addressRepository.save(addressInfo);
+  async create(address: Address) {
+    return await this.addressRepository.save(address);
+  }
+
+  async createByTransaction(manager: EntityManager, address: Address) {
+    return await manager.save(address);
   }
 }

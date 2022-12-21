@@ -20,7 +20,11 @@ export class Address extends CommonEntity {
   @OneToOne(() => Laundry, (laundry) => laundry.address)
   laundry: Laundry;
 
-  static from(roadAddr: string, detailAddr: string, jibun: string) {
+  static createEntityInstance(
+    roadAddr: string,
+    detailAddr: string,
+    jibun: string,
+  ) {
     const address = new Address();
     address.roadAddr = roadAddr;
     address.detailAddr = detailAddr;

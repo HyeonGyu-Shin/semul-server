@@ -1,42 +1,57 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { AddressRepository } from 'src/address/repository/address.repository';
 import { SignUpRequestDto } from '../dto/signUpRequestDto';
 import * as bcrypt from 'bcrypt';
 import { UsersRepository } from '../repository/users.repository';
-
+import { DataSource } from 'typeorm';
 @Injectable()
 export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly addressRepository: AddressRepository,
+    private readonly dataSource: DataSource,
   ) {}
 
+  async createQueryRunner() {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    const { manager } = queryRunner;
+    return { queryRunner, manager };
+  }
+
   async createUser(signUpRequestDto: SignUpRequestDto) {
-    const user = signUpRequestDto.toUserEntity();
-    const address = signUpRequestDto.toAddressEntity();
+    const { queryRunner, manager } = await this.createQueryRunner();
 
-    const foundUser = await this.usersRepository.findOneByEmail(user.email);
+    try {
+      const user = signUpRequestDto.toUserEntity();
+      const address = signUpRequestDto.toAddressEntity();
 
-    if (foundUser) throw new BadRequestException('중복된 이메일입니다.');
-
-    const newAddress = await this.addressRepository.create(address);
-
-    if (!newAddress)
-      throw new InternalServerErrorException(
-        '주소가 제대로 생성되지 않았습니다.',
+      const foundUser = await this.usersRepository.findOneByEmailByTransaction(
+        manager,
+        user.email,
       );
 
-    user.address = newAddress;
-    user.password = await this.hashPassword(user.password);
+      if (foundUser) throw new BadRequestException('중복된 이메일입니다.');
 
-    const newUser = await this.usersRepository.create(user);
+      user.address = await this.addressRepository.createByTransaction(
+        manager,
+        address,
+      );
+      user.password = await this.hashPassword(user.password);
 
-    return newUser.id;
+      const newUser = await this.usersRepository.createByTransaction(
+        manager,
+        user,
+      );
+
+      await queryRunner.commitTransaction();
+
+      return newUser.id;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      return err;
+    }
   }
 
   async deleteUser(userId: string) {

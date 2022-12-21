@@ -37,7 +37,7 @@ export class SignUpRequestDto {
   };
 
   toUserEntity() {
-    return User.from(
+    return User.createEntityInstance(
       this.email,
       this.password,
       this.name,
@@ -47,7 +47,7 @@ export class SignUpRequestDto {
   }
 
   toAddressEntity() {
-    return Address.from(
+    return Address.createEntityInstance(
       this.address.roadAddr,
       this.address.detailAddr,
       this.address.jibun,
