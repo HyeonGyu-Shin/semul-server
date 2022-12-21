@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Order } from '../../entities/order.entity';
 import { ProductsRepository } from '../../products/repository/products.repository';
 import { OrderProductsRepository } from '../repository/order_products.repository';
+import { CreateOrderDto } from './../../orders/dto/create-order.dto';
 
 @Injectable()
 export class OrderProductsService {
@@ -10,8 +11,8 @@ export class OrderProductsService {
     private orderProductsRepository: OrderProductsRepository,
   ) {}
 
-  async create(order: Order, products: string[]) {
-    products.forEach(async (product) => {
+  async create(orderData: CreateOrderDto) {
+    orderData.products.forEach(async (product) => {
       const { name, price } = await this.productsRepository.findOneBy({
         id: product['id'],
       });
@@ -20,7 +21,7 @@ export class OrderProductsService {
         productName: name,
         price: price,
         qty: product['qty'],
-        order: order,
+        order: orderData,
       });
     });
   }

@@ -3,6 +3,7 @@ import { Order } from '../../entities/order.entity';
 import { OrdersRepository } from '../repository/orders.repository';
 import { CreateOrderDto } from './../dto/create-order.dto';
 import { OrderProductsService } from './../../order_products/service/order_products.service';
+import { User } from '../../entities/users.entity';
 
 @Injectable()
 export class OrdersService {
@@ -11,22 +12,12 @@ export class OrdersService {
     private orderProductsService: OrderProductsService,
   ) {}
 
-  async create({
-    status,
-    pickUpMethod,
-    pickUpDateTime,
-    address,
-    products,
-  }: CreateOrderDto) {
-    const order = await this.ordersRepository.save({
-      status,
-      pickUpMethod,
-      pickUpDateTime,
-      address,
-      products,
-    });
+  async create(orderData: CreateOrderDto, user: User) {
+    const order = await this.ordersRepository.save({ ...orderData, user });
 
-    await this.orderProductsService.create(order, order.products);
+    await this.orderProductsService.create(order);
+
+    return order;
   }
 
   findAll(): Promise<Order[]> {
@@ -36,9 +27,7 @@ export class OrdersService {
   async findOne(id: string): Promise<Order> {
     const order = await this.ordersRepository.findOneBy({ id });
 
-    if (!order) {
-      throw new NotFoundException(`Order with ID ${id} not found.`);
-    }
+    if (!order) throw new NotFoundException(`Order with ID ${id} not found.`);
 
     return order;
   }

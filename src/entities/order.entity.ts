@@ -31,7 +31,7 @@ export class Order extends CommonEntity {
   @Column({ nullable: true })
   completedDateTime: Date;
 
-  @ManyToOne(() => User, (user) => user.order)
+  @ManyToOne(() => User, (user) => user.order, { eager: true })
   user: User;
 
   @ManyToOne(() => Laundry, (laundry) => laundry.order)

@@ -1,19 +1,31 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Order } from '../../entities/order.entity';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { OrdersService } from '../service/orders.service';
 import { FilterOrderDto } from '../dto/filter-order.dto';
+import { JwtAuthGuard } from '../../auth/guards/jwtGuard';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  async create(@Body() orderData: CreateOrderDto) {
-    return await this.ordersService.create(orderData);
+  @UseGuards(JwtAuthGuard)
+  async create(@Body() orderData: CreateOrderDto, @Req() req) {
+    return await this.ordersService.create(orderData, req.user);
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async getAll(@Query() dto: FilterOrderDto): Promise<Order[]> {
     if (dto.status) {
       return await this.ordersService.findByStatus(dto.status);
@@ -23,6 +35,7 @@ export class OrdersController {
   }
 
   @Get('/:id')
+  @UseGuards(JwtAuthGuard)
   async getOne(@Param('id') orderId: string): Promise<Order> {
     return await this.ordersService.findOne(orderId);
   }
