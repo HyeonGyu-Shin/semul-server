@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Order } from '../../entities/order.entity';
 import { ProductsRepository } from '../../products/repository/products.repository';
 import { OrderProductsRepository } from '../repository/order_products.repository';
