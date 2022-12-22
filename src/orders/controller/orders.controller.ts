@@ -12,7 +12,7 @@ import { Order } from '../../entities/order.entity';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { OrdersService } from '../service/orders.service';
 import { FilterOrderDto } from '../dto/filter-order.dto';
-import { JwtAuthGuard } from '../../auth/guards/jwtGuard';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 
 @Controller('orders')
 export class OrdersController {

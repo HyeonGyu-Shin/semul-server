@@ -6,11 +6,12 @@ import {
   HttpCode,
   Param,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwtGuard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { AuthService } from 'src/auth/service/auth.service';
+import { CurrentUser } from 'src/common/decorators/user.decorator';
+import { User } from 'src/entities/users.entity';
 import { LogInRequestDto } from '../dto/logInRequestDto';
 import { SignUpRequestDto } from '../dto/signUpRequestDto';
 import { UsersService } from '../service/users.service';
@@ -35,15 +36,18 @@ export class UsersController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async findOne(@Param('id') userId, @Req() req) {
-    this.authService.compareUserId(userId, req.user.id);
-    return req.user;
+  async findOne(@Param('id') userId: string, @CurrentUser() currentUser: User) {
+    this.authService.compareUserId(userId, currentUser);
+    return currentUser;
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async deleteOne(@Param('id') userId, @Req() req) {
-    this.authService.compareUserId(userId, req.user.id);
+  async deleteOne(
+    @Param('id') userId: string,
+    @CurrentUser() currentUser: User,
+  ) {
+    this.authService.compareUserId(userId, currentUser);
     return this.usersService.deleteUser(userId);
   }
 }
