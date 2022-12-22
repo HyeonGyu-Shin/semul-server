@@ -3,6 +3,7 @@ import { LogInRequestDto } from 'src/users/dto/logInRequestDto';
 import { UsersRepository } from 'src/users/repository/users.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/entities/users.entity';
 
 @Injectable()
 export class AuthService {
@@ -36,8 +37,9 @@ export class AuthService {
     return user;
   }
 
-  compareUserId(paramId: string, currentUserId) {
-    if (paramId !== currentUserId)
+  compareUserId(paramId: string, currentUser: User) {
+    const { id } = currentUser;
+    if (paramId !== id)
       throw new UnauthorizedException('다른 유저의 정보에 접근했습니다.');
     return;
   }

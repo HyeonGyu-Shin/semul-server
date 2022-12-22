@@ -1,3 +1,4 @@
+import { Role } from 'src/common/enums/role.enum';
 import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Address } from './address.entity';
 import { CommonEntity } from './common.entity';
@@ -19,8 +20,8 @@ export class User extends CommonEntity {
   @Column()
   phoneNumber: string;
 
-  @Column()
-  bizType: string;
+  @Column({ type: 'enum', enum: Role })
+  bizType: Role;
 
   @OneToOne(() => Address, (address) => address.user)
   @JoinColumn({ name: 'addressId', referencedColumnName: 'id' })
@@ -40,7 +41,7 @@ export class User extends CommonEntity {
     password: string,
     name: string,
     phoneNumber: string,
-    bizType: string,
+    bizType: Role,
   ) {
     const user = new User();
     user.email = email;
