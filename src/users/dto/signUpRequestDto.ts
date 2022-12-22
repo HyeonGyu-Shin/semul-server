@@ -1,10 +1,12 @@
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsNotEmptyObject,
   IsObject,
   IsString,
 } from 'class-validator';
+import { Role } from 'src/common/enums/role.enum';
 import { Address } from 'src/entities/address.entity';
 import { User } from 'src/entities/users.entity';
 
@@ -26,7 +28,7 @@ export class SignUpRequestDto {
   phoneNumber: string;
 
   @IsString()
-  bizType: string;
+  bizType: Role;
 
   @IsObject()
   @IsNotEmptyObject()
@@ -42,7 +44,7 @@ export class SignUpRequestDto {
       this.password,
       this.name,
       this.phoneNumber,
-      (this.bizType = 'user'),
+      this.bizType,
     );
   }
 
