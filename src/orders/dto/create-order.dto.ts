@@ -17,7 +17,7 @@ export class CreateOrderDto {
   readonly pickUpDateTime: Date;
 
   @IsObject()
-  readonly address: Object;
+  readonly address: { roadAddr: string; detailAddr: string; jibun: string };
 
   @IsDateString()
   @IsOptional()
