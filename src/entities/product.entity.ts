@@ -1,9 +1,9 @@
-import { Column, Entity } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 import { CommonEntity } from './common.entity';
 
 @Entity()
 export class Product extends CommonEntity {
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column()
