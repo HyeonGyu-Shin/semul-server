@@ -13,6 +13,8 @@ import { CreateOrderDto } from '../dto/create-order.dto';
 import { OrdersService } from '../service/orders.service';
 import { FilterOrderDto } from '../dto/filter-order.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { CurrentUser } from '../../common/decorators/user.decorator';
+import { User } from '../../entities/users.entity';
 
 @Controller('orders')
 export class OrdersController {
@@ -20,8 +22,11 @@ export class OrdersController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() orderData: CreateOrderDto, @Req() req) {
-    return await this.ordersService.create(orderData, req.user);
+  async create(
+    @Body() orderData: CreateOrderDto,
+    @CurrentUser() currentUser: User,
+  ) {
+    return await this.ordersService.create(orderData, currentUser);
   }
 
   @Get()

@@ -1,9 +1,8 @@
 import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { CommonEntity } from './common.entity';
-import { Laundry } from './laundry.entity';
-import { OrderProduct } from './order_product.entity';
-import { Review } from './review.entity';
 import { User } from './users.entity';
+import { Laundry } from './laundry.entity';
+import { Review } from './review.entity';
 
 @Entity()
 export class Order extends CommonEntity {
@@ -39,9 +38,4 @@ export class Order extends CommonEntity {
 
   @OneToOne(() => Review, (review) => review.order)
   review: Review;
-
-  @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.order, {
-    eager: true,
-  })
-  orderProducts: OrderProduct[];
 }
