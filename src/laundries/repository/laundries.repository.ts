@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Laundry } from 'src/entities/laundry.entity';
-import { User } from 'src/entities/users.entity';
+import { User } from 'src/users/users.entity';
 import { EntityManager, Repository } from 'typeorm';
+import { Laundry } from '../laundry.entity';
 
 @Injectable()
 export class LaundriesRepository {

@@ -3,10 +3,10 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { User } from 'src/entities/users.entity';
-import { Wallet } from 'src/entities/wallet.entity';
 import { WalletsRepository } from '../repository/wallets.repository';
 import { DataSource } from 'typeorm';
+import { User } from 'src/users/users.entity';
+import { Wallet } from '../wallet.entity';
 
 @Injectable()
 export class WalletsService {

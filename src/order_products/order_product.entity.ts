@@ -1,5 +1,5 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
-import { CommonEntity } from './common.entity';
+import { CommonEntity } from 'src/common/common.entity';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class OrderProduct extends CommonEntity {

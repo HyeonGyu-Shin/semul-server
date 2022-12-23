@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Order } from '../../entities/order.entity';
 import { DataSource } from 'typeorm';
 import { OrdersRepository } from '../repository/orders.repository';
 import { ProductsRepository } from './../../products/repository/products.repository';
 import { OrderProductsRepository } from './../../order_products/repository/order_products.repository';
 import { CreateOrderDto } from './../dto/create-order.dto';
-import { User } from '../../entities/users.entity';
-import { OrderProduct } from '../../entities/order_product.entity';
+import { User } from 'src/users/users.entity';
+import { OrderProduct } from 'src/order_products/order_product.entity';
+import { Order } from '../order.entity';
 
 @Injectable()
 export class OrdersService {

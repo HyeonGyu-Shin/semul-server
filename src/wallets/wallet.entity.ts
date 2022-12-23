@@ -1,6 +1,6 @@
+import { CommonEntity } from 'src/common/common.entity';
+import { User } from 'src/users/users.entity';
 import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
-import { CommonEntity } from './common.entity';
-import { User } from './users.entity';
 
 @Entity()
 export class Wallet extends CommonEntity {
