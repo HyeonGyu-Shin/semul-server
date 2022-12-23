@@ -17,4 +17,29 @@ export class AddressRepository {
   async createByTransaction(manager: EntityManager, address: Address) {
     return await manager.save(address);
   }
+
+  async findOne(address: Address) {
+    return await this.addressRepository.findOne({
+      where: {
+        id: address.id,
+      },
+    });
+  }
+
+  async updateOneInTransaction(manager: EntityManager, address: Address) {
+    return await manager
+      .createQueryBuilder()
+      .update(Address)
+      .set({
+        roadAddr: address.roadAddr,
+        detailAddr: address.detailAddr,
+        jibun: address.jibun,
+      })
+      .where('id = :id', { id: address.id })
+      .execute();
+  }
+
+  async deleteOne(address: Address) {
+    return await this.addressRepository.delete(address);
+  }
 }
