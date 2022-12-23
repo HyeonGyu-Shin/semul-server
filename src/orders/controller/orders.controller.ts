@@ -8,7 +8,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Order } from '../../entities/order.entity';
+import { Order } from '../order.entity';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { OrdersService } from '../service/orders.service';
 import { FilterOrderDto } from '../dto/filter-order.dto';

@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { CommonEntity } from './common.entity';
 import { Laundry } from './laundry.entity';
-import { Order } from './order.entity';
+import { Order } from '../orders/order.entity';
 
 @Entity()
 export class Review extends CommonEntity {

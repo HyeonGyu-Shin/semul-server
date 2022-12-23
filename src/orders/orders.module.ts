@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Order } from '../entities/order.entity';
+import { Order } from './order.entity';
 import { ProductsRepository } from '../products/repository/products.repository';
 import { OrdersRepository } from './repository/orders.repository';
 import { OrderProductsRepository } from '../order_products/repository/order_products.repository';

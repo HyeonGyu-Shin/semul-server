@@ -3,7 +3,7 @@ import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Address } from './address.entity';
 import { CommonEntity } from './common.entity';
 import { Laundry } from './laundry.entity';
-import { Order } from './order.entity';
+import { Order } from '../orders/order.entity';
 import { Wallet } from './wallet.entity';
 
 @Entity()
