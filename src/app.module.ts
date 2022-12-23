@@ -9,6 +9,7 @@ import { ProductsModule } from './products/products.module';
 import { WalletModule } from './wallets/wallets.module';
 import { OrderProductsModule } from './order_products/order_products.module';
 import { laundriesModule } from './laundries/laundries.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { laundriesModule } from './laundries/laundries.module';
     WalletModule,
     OrderProductsModule,
     laundriesModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

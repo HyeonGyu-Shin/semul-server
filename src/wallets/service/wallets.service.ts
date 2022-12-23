@@ -27,7 +27,7 @@ export class WalletsService {
     const { queryRunner, manager } = await this.createQueryRunner();
 
     try {
-      const foundWallet = await this.walletsRepository.findOneByTransaction(
+      const foundWallet = await this.walletsRepository.findOneByEm(
         manager,
         user,
       );
@@ -60,17 +60,14 @@ export class WalletsService {
     const { queryRunner, manager } = await this.createQueryRunner();
 
     try {
-      const wallet = await this.walletsRepository.findOneByTransaction(
-        manager,
-        user,
-      );
+      const wallet = await this.walletsRepository.findOneByEm(manager, user);
 
       if (!wallet) throw new BadRequestException('지갑을 먼저 생성해주세요!');
 
       wallet.user = user;
       wallet.money = Number(wallet.money) + Number(plusMoney);
 
-      await this.walletsRepository.updateByTransaction(manager, wallet);
+      await this.walletsRepository.updateByEm(manager, wallet);
 
       await queryRunner.commitTransaction();
 
@@ -85,10 +82,7 @@ export class WalletsService {
     const { queryRunner, manager } = await this.createQueryRunner();
 
     try {
-      const wallet = await this.walletsRepository.findOneByTransaction(
-        manager,
-        user,
-      );
+      const wallet = await this.walletsRepository.findOneByEm(manager, user);
 
       if (!wallet) throw new BadRequestException('지갑을 먼저 생성해주세요!');
       if (wallet.money <= 0)
@@ -97,7 +91,7 @@ export class WalletsService {
       wallet.user = user;
       wallet.money = Number(wallet.money) - Number(minusMoney);
 
-      await this.walletsRepository.updateByTransaction(manager, wallet);
+      await this.walletsRepository.updateByEm(manager, wallet);
 
       await queryRunner.commitTransaction();
 
