@@ -17,7 +17,7 @@ export class Laundry extends CommonEntity {
   phoneNumber: string;
 
   @OneToOne(() => User, (user) => user.laundry)
-  @JoinColumn()
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
 
   @OneToOne(() => Address, (address) => address.laundry)
@@ -29,4 +29,16 @@ export class Laundry extends CommonEntity {
 
   @OneToMany(() => Order, (order) => order.laundry)
   order: Order[];
+
+  static createEntityInstance(
+    name: string,
+    phoneNumber: string,
+    bizNo: string,
+  ) {
+    const laundry = new Laundry();
+    laundry.name = name;
+    laundry.phoneNumber = phoneNumber;
+    laundry.bizNo = bizNo;
+    return laundry;
+  }
 }
