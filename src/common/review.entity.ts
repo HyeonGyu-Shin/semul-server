@@ -1,5 +1,5 @@
-import { Laundry } from 'src/laundries/laundry.entity';
-import { Order } from 'src/orders/order.entity';
+import { Laundry } from '../laundries/laundry.entity';
+import { Order } from '../orders/order.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { CommonEntity } from './common.entity';
 

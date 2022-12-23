@@ -1,8 +1,8 @@
-import { Address } from 'src/address/address.entity';
-import { CommonEntity } from 'src/common/common.entity';
-import { Review } from 'src/common/review.entity';
-import { Order } from 'src/orders/order.entity';
-import { User } from 'src/users/users.entity';
+import { Address } from '../address/address.entity';
+import { CommonEntity } from '../common/common.entity';
+import { Review } from '../common/review.entity';
+import { Order } from '../orders/order.entity';
+import { User } from '../users/users.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity()

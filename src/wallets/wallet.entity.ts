@@ -1,5 +1,5 @@
-import { CommonEntity } from 'src/common/common.entity';
-import { User } from 'src/users/users.entity';
+import { CommonEntity } from '../common/common.entity';
+import { User } from '../users/users.entity';
 import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()

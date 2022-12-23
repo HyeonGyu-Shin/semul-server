@@ -22,7 +22,7 @@ import { AdminModule } from './admin/admin.module';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_SCHEMA,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: false,
       logging: true,
     }),
     UsersModule,

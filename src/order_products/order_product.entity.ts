@@ -1,4 +1,4 @@
-import { CommonEntity } from 'src/common/common.entity';
+import { CommonEntity } from '../common/common.entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity()

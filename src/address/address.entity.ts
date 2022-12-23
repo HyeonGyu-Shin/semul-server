@@ -1,6 +1,6 @@
-import { CommonEntity } from 'src/common/common.entity';
-import { Laundry } from 'src/laundries/laundry.entity';
-import { User } from 'src/users/users.entity';
+import { CommonEntity } from '../common/common.entity';
+import { Laundry } from '../laundries/laundry.entity';
+import { User } from '../users/users.entity';
 import { Column, Entity, OneToOne } from 'typeorm';
 
 @Entity()
