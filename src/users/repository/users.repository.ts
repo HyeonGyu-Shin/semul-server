@@ -16,16 +16,15 @@ export class UsersRepository {
     return await this.usersRepository.save(userInfo);
   }
 
-  async createByTransaction(manager: EntityManager, user: User) {
+  async createByEm(manager: EntityManager, user: User) {
     return await manager.save(user);
   }
 
   async findOneByEmail(email: string) {
-    return await this.usersRepository.findOne({ where: { email } });
-  }
-
-  async findOneByEmailByTransaction(manager: EntityManager, email: string) {
-    return await manager.findOne(User, { where: { email } });
+    return await this.usersRepository.findOne({
+      where: { email },
+      relations: { wallet: true, address: true },
+    });
   }
 
   async deleteOne(userId: string) {

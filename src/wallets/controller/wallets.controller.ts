@@ -2,9 +2,7 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   ParseIntPipe,
-  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -22,40 +20,29 @@ export class WalletsController {
     private readonly authService: AuthService,
   ) {}
 
-  @Post('')
-  async createWallet(
-    @Param('id') userId: string,
-    @CurrentUser() currentUser: User,
-  ) {
+  @Post()
+  async createWallet(@CurrentUser() currentUser: User) {
     return this.walletService.createWallet(currentUser);
   }
 
-  @Get(':id')
-  async showMoney(
-    @Param('id') userId: string,
-    @CurrentUser() currentUser: User,
-  ) {
-    this.authService.compareUserId(userId, currentUser);
+  @Get()
+  async showMoney(@CurrentUser() currentUser: User) {
     return this.walletService.showMoney(currentUser);
   }
 
-  @Patch('/charge/:id')
+  @Post('/charge')
   async chargeMoney(
     @Body('plusMoney', ParseIntPipe) plusMoney: number,
-    @Param('id') userId: string,
     @CurrentUser() currentUser: User,
   ) {
-    this.authService.compareUserId(userId, currentUser);
     return this.walletService.chargeMoney(currentUser, plusMoney);
   }
 
-  @Patch(':id')
+  @Post('/payment')
   async reduceMoney(
     @Body('minusMoney', ParseIntPipe) minusMoney: number,
-    @Param('id') userId: string,
     @CurrentUser() currentUser: User,
   ) {
-    this.authService.compareUserId(userId, currentUser);
     return this.walletService.reduceMoney(currentUser, minusMoney);
   }
 }

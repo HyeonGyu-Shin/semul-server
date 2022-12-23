@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -34,20 +33,15 @@ export class UsersController {
     return this.authService.jwtLogIn(logInRequestDto);
   }
 
-  @Get(':id')
+  @Get()
   @UseGuards(JwtAuthGuard)
-  async findOne(@Param('id') userId: string, @CurrentUser() currentUser: User) {
-    this.authService.compareUserId(userId, currentUser);
-    return currentUser;
+  async findOne(@CurrentUser() currentUser: User) {
+    return this.usersService.findOneUser(currentUser);
   }
 
-  @Delete(':id')
+  @Delete()
   @UseGuards(JwtAuthGuard)
-  async deleteOne(
-    @Param('id') userId: string,
-    @CurrentUser() currentUser: User,
-  ) {
-    this.authService.compareUserId(userId, currentUser);
-    return this.usersService.deleteUser(userId);
+  async deleteOne(@CurrentUser() currentUser: User) {
+    return this.usersService.deleteUser(currentUser);
   }
 }

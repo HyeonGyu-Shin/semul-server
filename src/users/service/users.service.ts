@@ -4,6 +4,8 @@ import { SignUpRequestDto } from '../dto/signUpRequestDto';
 import * as bcrypt from 'bcrypt';
 import { UsersRepository } from '../repository/users.repository';
 import { DataSource } from 'typeorm';
+import { User } from '../users.entity';
+import { UserResponseDto } from '../dto/userResponseDto';
 @Injectable()
 export class UsersService {
   constructor(
@@ -27,10 +29,7 @@ export class UsersService {
       const user = signUpRequestDto.toUserEntity();
       const address = signUpRequestDto.toAddressEntity();
 
-      const foundUser = await this.usersRepository.findOneByEmailByTransaction(
-        manager,
-        user.email,
-      );
+      const foundUser = await this.usersRepository.findOneByEmail(user.email);
 
       if (foundUser) throw new BadRequestException('중복된 이메일입니다.');
 
@@ -40,10 +39,7 @@ export class UsersService {
       );
       user.password = await this.hashPassword(user.password);
 
-      const newUser = await this.usersRepository.createByTransaction(
-        manager,
-        user,
-      );
+      const newUser = await this.usersRepository.createByEm(manager, user);
 
       await queryRunner.commitTransaction();
 
@@ -54,8 +50,22 @@ export class UsersService {
     }
   }
 
-  async deleteUser(userId: string) {
-    return this.usersRepository.deleteOne(userId);
+  async findOneUser(user: User) {
+    const { name, email, phoneNumber, bizType } = user;
+    const { roadAddr, detailAddr, jibun } = user.address;
+    const { money } = user.wallet;
+    return UserResponseDto.EntityToDto(
+      name,
+      email,
+      phoneNumber,
+      { roadAddr, detailAddr, jibun },
+      money,
+      bizType,
+    );
+  }
+
+  async deleteUser(user: User) {
+    return this.usersRepository.deleteOne(user.id);
   }
 
   async hashPassword(password: string) {

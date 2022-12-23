@@ -15,7 +15,7 @@ export class WalletsRepository {
     return await this.walletsRepository.save(walletInfo);
   }
 
-  async createByTransaction(manager: EntityManager, wallet: Wallet) {
+  async createByEm(manager: EntityManager, wallet: Wallet) {
     return await manager.save(wallet);
   }
 
@@ -28,7 +28,7 @@ export class WalletsRepository {
       .getRawOne();
   }
 
-  async findOneByTransaction(manager: EntityManager, user: User) {
+  async findOneByEm(manager: EntityManager, user: User) {
     return await manager
       .createQueryBuilder()
       .select('*')
@@ -46,7 +46,7 @@ export class WalletsRepository {
       .execute();
   }
 
-  async updateByTransaction(manager: EntityManager, wallet: Wallet) {
+  async updateByEm(manager: EntityManager, wallet: Wallet) {
     return await manager
       .createQueryBuilder()
       .update('wallet')
