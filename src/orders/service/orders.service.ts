@@ -50,6 +50,9 @@ export class OrdersService {
         orderProduct.price = price;
         orderProduct.qty = product['qty'];
         orderProduct.orderId = orderId;
+        orderData.images
+          ? (orderProduct.images = orderData.images)
+          : (orderProduct.images = ['default.jpg']);
 
         await this.orderProductsRepository.saveByTransaction(
           manager,
