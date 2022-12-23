@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Order } from '../../entities/order.entity';
+import { Order } from '../order.entity';
 import { DataSource, Repository, EntityManager } from 'typeorm';
 import { CreateOrderDto } from './../dto/create-order.dto';
 import { User } from '../../entities/users.entity';
-import { OrderProduct } from 'src/entities/order_product.entity';
+import { OrderProduct } from 'src/order_products/order_product.entity';
 
 @Injectable()
 export class OrdersRepository extends Repository<Order> {
@@ -15,12 +15,13 @@ export class OrdersRepository extends Repository<Order> {
     manager: EntityManager,
     orderData: CreateOrderDto,
     user: User,
+    orderNum: number,
   ) {
     return await manager
       .createQueryBuilder()
       .insert()
       .into(Order)
-      .values({ ...orderData, user })
+      .values({ ...orderData, user, orderNum: orderNum + 1 })
       .execute();
   }
 

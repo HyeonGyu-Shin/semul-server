@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Order } from '../../entities/order.entity';
+import { Order } from '../order.entity';
 import { DataSource } from 'typeorm';
 import { OrdersRepository } from '../repository/orders.repository';
 import { ProductsRepository } from './../../products/repository/products.repository';
 import { OrderProductsRepository } from './../../order_products/repository/order_products.repository';
 import { CreateOrderDto } from './../dto/create-order.dto';
 import { User } from '../../entities/users.entity';
-import { OrderProduct } from '../../entities/order_product.entity';
+import { OrderProduct } from '../../order_products/order_product.entity';
 
 @Injectable()
 export class OrdersService {
@@ -25,12 +25,13 @@ export class OrdersService {
     await queryRunner.startTransaction();
 
     try {
+      const count = await this.ordersRepository.count();
       const { identifiers } = await this.ordersRepository.saveByTransaction(
         manager,
         orderData,
         user,
+        count,
       );
-
       const orderId = identifiers[0]['id'];
 
       for (const product of orderData.products) {
@@ -53,7 +54,7 @@ export class OrdersService {
 
       await queryRunner.commitTransaction();
 
-      return { orderId };
+      return { id: orderId };
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw new NotFoundException();
