@@ -1,3 +1,5 @@
+import { User } from '../users.entity';
+
 export class UserResponseDto {
   email: string;
 
@@ -11,15 +13,14 @@ export class UserResponseDto {
 
   bizType: string;
 
-  static EntityToDto(name, email, phoneNumber, address, money, bizType) {
-    const user = new UserResponseDto();
-    user.name = name;
-    user.email = email;
-    user.phoneNumber = phoneNumber;
-    user.address = address;
-    user.money = money;
-    user.bizType = bizType;
-
-    return user;
+  static EntityToDto(user: User) {
+    const resDto = new UserResponseDto();
+    resDto.name = user.name;
+    resDto.email = user.email;
+    resDto.phoneNumber = user.phoneNumber;
+    resDto.address = user.address;
+    resDto.money = user?.wallet?.money ?? 0;
+    resDto.bizType = user.bizType;
+    return resDto;
   }
 }

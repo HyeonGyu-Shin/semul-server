@@ -51,17 +51,7 @@ export class UsersService {
   }
 
   async findOneUser(user: User) {
-    const { name, email, phoneNumber, bizType } = user;
-    const { roadAddr, detailAddr, jibun } = user.address;
-    const { money } = user.wallet;
-    return UserResponseDto.EntityToDto(
-      name,
-      email,
-      phoneNumber,
-      { roadAddr, detailAddr, jibun },
-      money,
-      bizType,
-    );
+    return UserResponseDto.EntityToDto(user);
   }
 
   async deleteUser(user: User) {
