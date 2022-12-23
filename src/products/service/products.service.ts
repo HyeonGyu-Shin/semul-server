@@ -1,7 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ProductsRepository } from '../repository/products.repository';
-import { Product } from '../../entities/product.entity';
+import { Product } from '../product.entity';
 import { CreateProductDto } from '../dto/create-product.dto';
+import { UpdateProductDto } from './../dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -29,5 +34,23 @@ export class ProductsService {
 
   findByCategory(category: string): Promise<Product[]> {
     return this.productsRepository.findByCategory(category);
+  }
+
+  async updateOne(id: string, product: UpdateProductDto) {
+    const foundProduct = await this.productsRepository.findOneBy({
+      name: product.name,
+    });
+
+    if (foundProduct) {
+      throw new BadRequestException(
+        `name: '${product.name}' is already use in the products`,
+      );
+    }
+
+    await this.productsRepository.update(id, product);
+  }
+
+  async deleteOne(id: string) {
+    await this.productsRepository.softDelete(id);
   }
 }
