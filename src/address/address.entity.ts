@@ -1,7 +1,7 @@
+import { CommonEntity } from 'src/common/common.entity';
+import { Laundry } from 'src/laundries/laundry.entity';
+import { User } from 'src/users/users.entity';
 import { Column, Entity, OneToOne } from 'typeorm';
-import { CommonEntity } from './common.entity';
-import { Laundry } from './laundry.entity';
-import { User } from './users.entity';
 
 @Entity()
 export class Address extends CommonEntity {

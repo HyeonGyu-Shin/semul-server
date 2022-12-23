@@ -11,10 +11,10 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { AuthService } from 'src/auth/service/auth.service';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
-import { User } from 'src/entities/users.entity';
 import { LogInRequestDto } from '../dto/logInRequestDto';
 import { SignUpRequestDto } from '../dto/signUpRequestDto';
 import { UsersService } from '../service/users.service';
+import { User } from '../users.entity';
 
 @Controller('users')
 export class UsersController {

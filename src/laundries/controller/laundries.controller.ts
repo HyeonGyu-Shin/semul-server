@@ -13,9 +13,9 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { LaundriesService } from '../service/laundries.service';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
-import { User } from 'src/entities/users.entity';
 import { LaundryDto } from '../dto/laundryDto';
 import { Role } from 'src/common/enums/role.enum';
+import { User } from 'src/users/users.entity';
 
 @Controller('laundries')
 export class LaundriesController {

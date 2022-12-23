@@ -1,8 +1,8 @@
-import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
-import { CommonEntity } from './common.entity';
-import { User } from './users.entity';
-import { Laundry } from './laundry.entity';
-import { Review } from './review.entity';
+import { CommonEntity } from 'src/common/common.entity';
+import { Review } from 'src/common/review.entity';
+import { Laundry } from 'src/laundries/laundry.entity';
+import { User } from 'src/users/users.entity';
+import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity()
 export class Order extends CommonEntity {

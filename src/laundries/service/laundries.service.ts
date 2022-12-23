@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AddressRepository } from 'src/address/repository/address.repository';
-import { User } from 'src/entities/users.entity';
+import { User } from 'src/users/users.entity';
 import { DataSource } from 'typeorm';
 import { LaundryDto } from '../dto/laundryDto';
 import { LaundriesRepository } from '../repository/laundries.repository';

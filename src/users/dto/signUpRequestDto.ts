@@ -1,14 +1,13 @@
 import {
   IsEmail,
-  IsEnum,
   IsNotEmpty,
   IsNotEmptyObject,
   IsObject,
   IsString,
 } from 'class-validator';
+import { Address } from 'src/address/address.entity';
 import { Role } from 'src/common/enums/role.enum';
-import { Address } from 'src/entities/address.entity';
-import { User } from 'src/entities/users.entity';
+import { User } from '../users.entity';
 
 export class SignUpRequestDto {
   @IsString()

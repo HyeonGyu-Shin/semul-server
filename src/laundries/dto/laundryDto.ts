@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { AddressDto } from 'src/address/dto/addressDto';
-import { Laundry } from 'src/entities/laundry.entity';
+import { Laundry } from '../laundry.entity';
 
 export class LaundryDto {
   @ValidateNested()

@@ -5,16 +5,15 @@ import {
   Param,
   Post,
   Query,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import { Order } from '../../entities/order.entity';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { OrdersService } from '../service/orders.service';
 import { FilterOrderDto } from '../dto/filter-order.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { CurrentUser } from '../../common/decorators/user.decorator';
-import { User } from '../../entities/users.entity';
+import { User } from 'src/users/users.entity';
+import { Order } from '../order.entity';
 
 @Controller('orders')
 export class OrdersController {

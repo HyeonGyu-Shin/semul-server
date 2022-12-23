@@ -1,10 +1,10 @@
+import { Address } from 'src/address/address.entity';
+import { CommonEntity } from 'src/common/common.entity';
 import { Role } from 'src/common/enums/role.enum';
+import { Laundry } from 'src/laundries/laundry.entity';
+import { Order } from 'src/orders/order.entity';
+import { Wallet } from 'src/wallets/wallet.entity';
 import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Address } from './address.entity';
-import { CommonEntity } from './common.entity';
-import { Laundry } from './laundry.entity';
-import { Order } from './order.entity';
-import { Wallet } from './wallet.entity';
 
 @Entity()
 export class User extends CommonEntity {

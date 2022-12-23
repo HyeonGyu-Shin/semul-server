@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Address } from 'src/entities/address.entity';
+import { Address } from './address.entity';
 import { AddressRepository } from './repository/address.repository';
 
 @Module({

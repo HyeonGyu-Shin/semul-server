@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Address } from 'src/entities/address.entity';
+import { Address } from '../address.entity';
 
 export class AddressDto {
   @IsString()
