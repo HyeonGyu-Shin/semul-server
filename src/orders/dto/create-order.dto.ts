@@ -29,4 +29,7 @@ export class CreateOrderDto {
 
   @IsArray()
   readonly products: string[];
+
+  @IsString()
+  readonly laundryId: string;
 }

@@ -4,9 +4,10 @@ import { OrdersRepository } from '../repository/orders.repository';
 import { ProductsRepository } from './../../products/repository/products.repository';
 import { OrderProductsRepository } from './../../order_products/repository/order_products.repository';
 import { CreateOrderDto } from './../dto/create-order.dto';
-import { User } from 'src/users/users.entity';
-import { OrderProduct } from 'src/order_products/order_product.entity';
+import { User } from '../../users/users.entity';
+import { OrderProduct } from '../../order_products/order_product.entity';
 import { Order } from '../order.entity';
+import { LaundriesRepository } from './../../laundries/repository/laundries.repository';
 
 @Injectable()
 export class OrdersService {
@@ -15,6 +16,7 @@ export class OrdersService {
     private ordersRepository: OrdersRepository,
     private productsRepository: ProductsRepository,
     private orderProductsRepository: OrderProductsRepository,
+    private laundriesRepository: LaundriesRepository,
   ) {}
 
   async create(orderData: CreateOrderDto, user: User) {
@@ -25,11 +27,14 @@ export class OrdersService {
     await queryRunner.startTransaction();
 
     try {
+      const laundryId = orderData.laundryId;
+      const laundry = await this.laundriesRepository.findOne(laundryId);
       const count = await this.ordersRepository.count();
       const { identifiers } = await this.ordersRepository.saveByTransaction(
         manager,
         orderData,
         user,
+        laundry,
         count,
       );
       const orderId = identifiers[0]['id'];
