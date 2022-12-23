@@ -1,7 +1,7 @@
-import { CommonEntity } from 'src/common/common.entity';
-import { Review } from 'src/common/review.entity';
-import { Laundry } from 'src/laundries/laundry.entity';
-import { User } from 'src/users/users.entity';
+import { CommonEntity } from '../common/common.entity';
+import { Review } from '../common/review.entity';
+import { Laundry } from '../laundries/laundry.entity';
+import { User } from '../users/users.entity';
 import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity()
@@ -36,7 +36,7 @@ export class Order extends CommonEntity {
   @ManyToOne(() => User, (user) => user.order, { eager: true })
   user: User;
 
-  @ManyToOne(() => Laundry, (laundry) => laundry.order)
+  @ManyToOne(() => Laundry, (laundry) => laundry.order, { eager: true })
   laundry: Laundry;
 
   @OneToOne(() => Review, (review) => review.order)
