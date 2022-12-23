@@ -25,12 +25,13 @@ export class OrdersService {
     await queryRunner.startTransaction();
 
     try {
+      const count = await this.ordersRepository.count();
       const { identifiers } = await this.ordersRepository.saveByTransaction(
         manager,
         orderData,
         user,
+        count,
       );
-
       const orderId = identifiers[0]['id'];
 
       for (const product of orderData.products) {
@@ -53,7 +54,7 @@ export class OrdersService {
 
       await queryRunner.commitTransaction();
 
-      return { orderId };
+      return { id: orderId };
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw new NotFoundException();

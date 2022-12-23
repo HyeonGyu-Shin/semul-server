@@ -15,12 +15,13 @@ export class OrdersRepository extends Repository<Order> {
     manager: EntityManager,
     orderData: CreateOrderDto,
     user: User,
+    orderNum: number,
   ) {
     return await manager
       .createQueryBuilder()
       .insert()
       .into(Order)
-      .values({ ...orderData, user })
+      .values({ ...orderData, user, orderNum: orderNum + 1 })
       .execute();
   }
 
