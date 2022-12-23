@@ -3,11 +3,12 @@ import { Review } from '../common/review.entity';
 import { Laundry } from '../laundries/laundry.entity';
 import { User } from '../users/users.entity';
 import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
+import { Status } from '../common/enums/status.enum';
 
 @Entity()
 export class Order extends CommonEntity {
-  @Column()
-  status: string;
+  @Column({ type: 'enum', enum: Status })
+  status: Status;
 
   @Column()
   pickUpMethod: string;
