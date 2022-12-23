@@ -32,6 +32,12 @@ export class LaundriesRepository {
       .getRawMany();
   }
 
+  async findAllLaundries(): Promise<Laundry[] | []> {
+    return await this.laundriesRepository.find({
+      relations: { user: true, address: true },
+    });
+  }
+
   async findOneByUserId(user: User): Promise<Laundry | undefined> {
     return await this.laundriesRepository
       .createQueryBuilder('laundry')

@@ -14,4 +14,8 @@ export class ProductsRepository extends Repository<Product> {
       .getMany();
     return result;
   }
+
+  async findAllProducts() {
+    return await this.createQueryBuilder('Product').getMany();
+  }
 }

@@ -10,5 +10,6 @@ import { LaundriesService } from './service/laundries.service';
   imports: [TypeOrmModule.forFeature([Laundry]), AddressModule],
   controllers: [LaundriesController],
   providers: [LaundriesService, LaundriesRepository],
+  exports: [LaundriesRepository],
 })
 export class laundriesModule {}

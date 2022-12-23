@@ -3,19 +3,21 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/role.enum';
+import { AdminService } from '../service/admin.service';
 
 @Controller('admin')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(Role.Admin)
 export class AdminController {
+  constructor(private readonly adminService: AdminService) {}
   @Get('users')
   async getAllUsers() {
-    return 'get All users';
+    return this.adminService.findAllUsers();
   }
 
   @Get('partners')
   async getAllPartners() {
-    return 'get All partners';
+    return this.adminService.findAllPartners();
   }
 
   @Get('orders')
@@ -25,6 +27,6 @@ export class AdminController {
 
   @Get('products')
   async getAllProducts() {
-    return 'get ALl products';
+    return this.adminService.findAllProducts();
   }
 }

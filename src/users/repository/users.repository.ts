@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Address } from 'src/address/address.entity';
+import { Role } from 'src/common/enums/role.enum';
 import { EntityManager, Repository } from 'typeorm';
 import { User } from '../users.entity';
 
@@ -23,6 +24,13 @@ export class UsersRepository {
   async findOneByEmail(email: string) {
     return await this.usersRepository.findOne({
       where: { email },
+      relations: { wallet: true, address: true },
+    });
+  }
+
+  async findAllUsers(): Promise<User[] | []> {
+    return await this.usersRepository.find({
+      where: { bizType: Role.User },
       relations: { wallet: true, address: true },
     });
   }
