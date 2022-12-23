@@ -33,4 +33,8 @@ export class CreateOrderDto {
 
   @IsString()
   readonly laundryId: string;
+
+  @IsArray()
+  @IsOptional()
+  readonly images: string[];
 }

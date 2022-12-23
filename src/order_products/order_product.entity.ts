@@ -14,4 +14,7 @@ export class OrderProduct extends CommonEntity {
 
   @Column()
   orderId: string;
+
+  @Column('simple-array')
+  images: string[];
 }
