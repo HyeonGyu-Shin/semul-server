@@ -5,7 +5,7 @@ import { User } from '../users/users.entity';
 import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 import { Status } from '../common/enums/status.enum';
 
-@Entity()
+@Entity('orders')
 export class Order extends CommonEntity {
   @Column({ type: 'enum', enum: Status })
   status: Status;
