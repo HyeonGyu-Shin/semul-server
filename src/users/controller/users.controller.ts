@@ -5,11 +5,13 @@ import {
   Get,
   HttpCode,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { AuthService } from 'src/auth/service/auth.service';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
+import { ChangeUserInfoRequestDto } from '../dto/changeUserInfoRequestDto';
 import { LogInRequestDto } from '../dto/logInRequestDto';
 import { SignUpRequestDto } from '../dto/signUpRequestDto';
 import { UsersService } from '../service/users.service';
@@ -35,8 +37,32 @@ export class UsersController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async findOne(@CurrentUser() currentUser: User) {
+  async getUserInfo(@CurrentUser() currentUser: User) {
     return this.usersService.findOneUser(currentUser);
+  }
+
+  @Get('orders')
+  @UseGuards(JwtAuthGuard)
+  async getOrderHistory(@CurrentUser() currentUser: User) {
+    return '주문 기록 가져오기';
+  }
+
+  @Put('password')
+  @UseGuards(JwtAuthGuard)
+  async changePassword(
+    @CurrentUser() currentUser: User,
+    @Body('password') password: string,
+  ) {
+    return this.usersService.updateUserPassword(currentUser, password);
+  }
+
+  @Put()
+  @UseGuards(JwtAuthGuard)
+  async changeUserInfo(
+    @CurrentUser() currentUser: User,
+    @Body() newUserInfo: ChangeUserInfoRequestDto,
+  ) {
+    return this.usersService.updateUserInfo(currentUser, newUserInfo);
   }
 
   @Delete()

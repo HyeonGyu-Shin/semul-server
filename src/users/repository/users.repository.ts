@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Address } from 'src/address/address.entity';
 import { Role } from 'src/common/enums/role.enum';
 import { EntityManager, Repository } from 'typeorm';
+import { ChangeUserInfoRequestDto } from '../dto/changeUserInfoRequestDto';
 import { User } from '../users.entity';
 
 @Injectable()
@@ -33,6 +34,17 @@ export class UsersRepository {
       where: { bizType: Role.User },
       relations: { wallet: true, address: true },
     });
+  }
+
+  async updatePassword(user: User, password: string) {
+    return await this.usersRepository.update({ id: user.id }, { password });
+  }
+
+  async updateOne(user: User, newUserInfo: ChangeUserInfoRequestDto) {
+    return await this.usersRepository.update(
+      { id: user.id },
+      { name: newUserInfo.name },
+    );
   }
 
   async deleteOne(userId: string) {

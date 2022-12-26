@@ -11,8 +11,8 @@ export class WalletsRepository {
     private readonly walletsRepository: Repository<Wallet>,
   ) {}
 
-  async create(walletInfo: Wallet) {
-    return await this.walletsRepository.save(walletInfo);
+  async create(wallet: Wallet) {
+    return await this.walletsRepository.save(wallet);
   }
 
   async createByEm(manager: EntityManager, wallet: Wallet) {

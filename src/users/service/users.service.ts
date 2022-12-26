@@ -6,11 +6,15 @@ import { UsersRepository } from '../repository/users.repository';
 import { DataSource } from 'typeorm';
 import { User } from '../users.entity';
 import { UserResponseDto } from '../dto/userResponseDto';
+import { ChangeUserInfoRequestDto } from '../dto/changeUserInfoRequestDto';
+import { WalletsRepository } from 'src/wallets/repository/wallets.repository';
+import { Wallet } from '../../wallets/wallet.entity';
 @Injectable()
 export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly addressRepository: AddressRepository,
+    private readonly walletRepository: WalletsRepository,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -33,17 +37,23 @@ export class UsersService {
 
       if (foundUser) throw new BadRequestException('중복된 이메일입니다.');
 
+      const wallet = Wallet.createEntityInstance();
+      wallet.user = user;
+
       user.address = await this.addressRepository.createByTransaction(
         manager,
         address,
       );
       user.password = await this.hashPassword(user.password);
+      user.wallet = wallet;
 
-      const newUser = await this.usersRepository.createByEm(manager, user);
+      await this.walletRepository.create(wallet);
+
+      await this.usersRepository.createByEm(manager, user);
 
       await queryRunner.commitTransaction();
 
-      return newUser.id;
+      return '회원가입이 완료되었습니다.';
     } catch (err) {
       await queryRunner.rollbackTransaction();
       return err;
@@ -54,8 +64,38 @@ export class UsersService {
     return UserResponseDto.EntityToDto(user);
   }
 
+  async updateUserPassword(user: User, password: string) {
+    const newPassword = await this.hashPassword(password);
+    return (await this.usersRepository.updatePassword(user, newPassword))
+      ? '비밀번호가 성공적으로 변경되었습니다.'
+      : new Error('에러가 발생했습니다.');
+  }
+
+  async updateUserInfo(user: User, newUserInfo: ChangeUserInfoRequestDto) {
+    const { queryRunner, manager } = await this.createQueryRunner();
+
+    try {
+      const { roadAddr, detailAddr, jibun } = newUserInfo.address;
+      const address = await this.addressRepository.findOne(user.address);
+      address.roadAddr = roadAddr;
+      address.detailAddr = detailAddr;
+      address.jibun = jibun;
+      await this.addressRepository.updateOneInTransaction(manager, address);
+
+      await this.usersRepository.updateOne(user, newUserInfo);
+
+      queryRunner.commitTransaction();
+
+      return '성공적으로 변경했습니다!';
+    } catch (err) {
+      queryRunner.rollbackTransaction();
+      return err;
+    }
+  }
+
   async deleteUser(user: User) {
-    return this.usersRepository.deleteOne(user.id);
+    await this.usersRepository.deleteOne(user.id);
+    return '성공적으로 삭제되었습니다.';
   }
 
   async hashPassword(password: string) {
