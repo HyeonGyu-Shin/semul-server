@@ -8,6 +8,7 @@ import { User } from '../../users/users.entity';
 import { OrderProduct } from '../../order_products/order_product.entity';
 import { Order } from '../order.entity';
 import { LaundriesRepository } from './../../laundries/repository/laundries.repository';
+import { UpdateOrderDto } from '../dto/update-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -27,8 +28,9 @@ export class OrdersService {
     await queryRunner.startTransaction();
 
     try {
-      const laundryId = orderData.laundryId;
-      const laundry = await this.laundriesRepository.findOne(laundryId);
+      const laundry = await this.laundriesRepository.findOne(
+        orderData.laundryId,
+      );
       const count = await this.ordersRepository.count();
       const { identifiers } = await this.ordersRepository.saveByTransaction(
         manager,
@@ -98,5 +100,16 @@ export class OrdersService {
 
   findByStatus(status: string): Promise<Order[]> {
     return this.ordersRepository.findByStatus(status);
+  }
+
+  async updateOne(id: string, order: UpdateOrderDto) {
+    const foundOrder = await this.ordersRepository.findOneBy({
+      id,
+    });
+
+    if (!foundOrder)
+      throw new NotFoundException(`Order with ID ${id} not found.`);
+
+    await this.ordersRepository.update(id, order);
   }
 }
