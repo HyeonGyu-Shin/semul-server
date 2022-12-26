@@ -3,6 +3,7 @@ import { AddressRepository } from 'src/address/repository/address.repository';
 import { User } from 'src/users/users.entity';
 import { DataSource } from 'typeorm';
 import { LaundryDto } from '../dto/laundryDto';
+import { UpdateLaundryDto } from '../dto/updateLaundryDto';
 import { LaundriesRepository } from '../repository/laundries.repository';
 
 @Injectable()
@@ -44,31 +45,42 @@ export class LaundriesService {
     }
   }
 
-  async updateLaundry(user: User, laundryDto: LaundryDto) {
+  async updateLaundry(user: User, updateLaundryDto: UpdateLaundryDto) {
     const { queryRunner, manager } = await this.createQueryRunner();
 
     try {
       const foundLaundry = await this.laundriesRepository.findOneByUserId(user);
 
-      const newAddress = laundryDto.address.toAddressEntity();
-      newAddress.id = foundLaundry.address.id;
+      const { address, ...laundryInfo } = updateLaundryDto;
 
-      const newLaundry = laundryDto.toLaundryEntity();
-      newLaundry.id = foundLaundry.id;
+      if (address) {
+        const newAddress = updateLaundryDto.address.toAddressEntity();
+        newAddress.id = foundLaundry.address.id;
 
-      await this.addressRepository.updateOneInTransaction(manager, newAddress);
+        await this.addressRepository.updateOneInTransaction(
+          manager,
+          newAddress,
+        );
+      }
 
-      await this.laundriesRepository.updateOneByEm(manager, newLaundry);
+      if (Object.keys(laundryInfo).length !== 0) {
+        foundLaundry.name = laundryInfo.name;
+        foundLaundry.bizNo = laundryInfo.bizNo;
+        foundLaundry.phoneNumber = laundryInfo.phoneNumber;
+        await this.laundriesRepository.updateOneByEm(manager, foundLaundry);
+      }
 
       queryRunner.commitTransaction();
+
+      return '수정이 완료되었습니다.';
     } catch (err) {
       queryRunner.rollbackTransaction();
-      console.log(err);
+      return err;
     }
   }
 
-  async findLaundry(laundryId: string) {
-    const laundry = await this.laundriesRepository.findOne(laundryId);
+  async findLaundry(user: User) {
+    const laundry = await this.laundriesRepository.findOneByUserId(user);
     return laundry ? laundry : '세탁소가 없습니다.';
   }
 
@@ -78,6 +90,7 @@ export class LaundriesService {
 
   async deleteLaundry(user: User) {
     const laundry = await this.laundriesRepository.findOneByUserId(user);
-    return await this.laundriesRepository.deleteOne(laundry);
+    await this.laundriesRepository.deleteOne(laundry);
+    return '세탁소 삭제가 완료되었습니다.';
   }
 }
