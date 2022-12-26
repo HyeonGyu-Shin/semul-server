@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Param,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -12,8 +14,9 @@ import { OrdersService } from '../service/orders.service';
 import { FilterOrderDto } from '../dto/filter-order.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { CurrentUser } from '../../common/decorators/user.decorator';
-import { User } from 'src/users/users.entity';
+import { User } from '../../users/users.entity';
 import { Order } from '../order.entity';
+import { UpdateOrderDto } from '../dto/update-order.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -42,5 +45,14 @@ export class OrdersController {
   @UseGuards(JwtAuthGuard)
   async getOne(@Param('id') orderId: string): Promise<Order> {
     return await this.ordersService.findOne(orderId);
+  }
+
+  @Patch('/:id')
+  @HttpCode(204)
+  async patchOne(
+    @Param('id') orderId: string,
+    @Body() order: UpdateOrderDto,
+  ): Promise<void> {
+    await this.ordersService.updateOne(orderId, order);
   }
 }
