@@ -1,12 +1,14 @@
 import { Type } from 'class-transformer';
-import { IsString, ValidateNested } from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { AddressDto } from '../../address/dto/addressDto';
 
 export class ChangeUserInfoRequestDto {
+  @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
+  @IsOptional()
   @ValidateNested()
   @Type(() => AddressDto)
-  address: AddressDto;
+  address?: AddressDto;
 }
