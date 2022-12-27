@@ -3,6 +3,7 @@ import { Status } from '../../common/enums/status.enum';
 
 export class UpdateOrderDto {
   @IsString()
+  @IsOptional()
   readonly status: Status;
 
   @IsString()
