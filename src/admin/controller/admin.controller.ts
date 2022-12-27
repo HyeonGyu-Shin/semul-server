@@ -12,6 +12,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/role.enum';
+import { Status } from 'src/common/enums/status.enum';
 import { LaundryDto } from 'src/laundries/dto/laundryDto';
 import { UpdateOrderDto } from 'src/orders/dto/update-order.dto';
 import { AdminService } from '../service/admin.service';
