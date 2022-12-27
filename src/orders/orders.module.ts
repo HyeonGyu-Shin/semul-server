@@ -21,5 +21,6 @@ import { Laundry } from '../laundries/laundry.entity';
     OrderProductsService,
   ],
   controllers: [OrdersController],
+  exports: [OrdersRepository],
 })
 export class OrdersModule {}
