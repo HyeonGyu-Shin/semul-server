@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AddressRepository } from 'src/address/repository/address.repository';
+import { Status } from 'src/common/enums/status.enum';
 import { LaundryDto } from 'src/laundries/dto/laundryDto';
 import { LaundriesRepository } from 'src/laundries/repository/laundries.repository';
+import { UpdateOrderDto } from 'src/orders/dto/update-order.dto';
 import { OrdersRepository } from 'src/orders/repository/orders.repository';
 import { ProductsRepository } from 'src/products/repository/products.repository';
 import { UsersRepository } from 'src/users/repository/users.repository';
@@ -61,6 +63,26 @@ export class AdminService {
       queryRunner.rollbackTransaction();
       return err;
     }
+  }
+
+  async updateOrderStatus(orderId: string, orderInfo: UpdateOrderDto) {
+    if (
+      !(await this.ordersRepository.findOne({
+        where: {
+          id: orderId,
+        },
+      }))
+    )
+      throw new NotFoundException('주문을 찾을 수 없습니다.');
+
+    if (orderInfo.status === Status.Complete)
+      orderInfo = { ...orderInfo, completedDateTime: new Date() };
+    else if (orderInfo.status === Status.Cancel)
+      orderInfo = { ...orderInfo, cancelledDateTime: new Date() };
+
+    await this.ordersRepository.update(orderId, orderInfo);
+
+    return '성공적으로 변경되었습니다.';
   }
 
   async findAllProducts() {
