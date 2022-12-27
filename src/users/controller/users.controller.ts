@@ -11,6 +11,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { AuthService } from 'src/auth/service/auth.service';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
+import { Role } from 'src/common/enums/role.enum';
 import { ChangeUserInfoRequestDto } from '../dto/changeUserInfoRequestDto';
 import { LogInRequestDto } from '../dto/logInRequestDto';
 import { SignUpRequestDto } from '../dto/signUpRequestDto';
@@ -26,7 +27,7 @@ export class UsersController {
 
   @Post('signup')
   async signUp(@Body() signUpRequestDto: SignUpRequestDto) {
-    return this.usersService.createUser(signUpRequestDto);
+    return this.usersService.createUser(signUpRequestDto, Role.User);
   }
 
   @Post('login')

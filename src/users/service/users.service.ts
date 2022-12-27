@@ -9,6 +9,7 @@ import { UserResponseDto } from '../dto/userResponseDto';
 import { ChangeUserInfoRequestDto } from '../dto/changeUserInfoRequestDto';
 import { WalletsRepository } from 'src/wallets/repository/wallets.repository';
 import { Wallet } from '../../wallets/wallet.entity';
+import { Role } from 'src/common/enums/role.enum';
 @Injectable()
 export class UsersService {
   constructor(
@@ -26,11 +27,14 @@ export class UsersService {
     return { queryRunner, manager };
   }
 
-  async createUser(signUpRequestDto: SignUpRequestDto) {
+  async createUser(
+    signUpRequestDto: SignUpRequestDto,
+    bizType: Role.User | Role.TempPartner,
+  ) {
     const { queryRunner, manager } = await this.createQueryRunner();
 
     try {
-      const user = signUpRequestDto.toUserEntity();
+      const user = signUpRequestDto.toUserEntity(bizType);
       const address = signUpRequestDto.toAddressEntity();
 
       const foundUser = await this.usersRepository.findOneByEmail(user.email);
@@ -93,6 +97,14 @@ export class UsersService {
       queryRunner.rollbackTransaction();
       return err;
     }
+  }
+
+  async updateBizType(user: User, bizType: Role) {
+    const result = await this.usersRepository.updateBizType(user, bizType);
+
+    if (result.affected !== 1) throw new Error('실패했습니다.');
+
+    return '성공적으로 변경했습니다.';
   }
 
   async deleteUser(user: User) {

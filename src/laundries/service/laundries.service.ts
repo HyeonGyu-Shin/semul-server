@@ -33,8 +33,7 @@ export class LaundriesService {
       await this.addressRepository.createByTransaction(manager, address);
       laundry.user = user;
       laundry.address = address;
-
-      console.log(laundry);
+      laundry.isApprove = false;
 
       await this.laundriesRepository.createByEm(manager, laundry);
       await queryRunner.commitTransaction();

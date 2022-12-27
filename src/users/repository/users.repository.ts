@@ -47,6 +47,10 @@ export class UsersRepository {
     );
   }
 
+  async updateBizType(user: User, bizType: Role) {
+    return await this.usersRepository.update({ id: user.id }, { bizType });
+  }
+
   async deleteOne(userId: string) {
     return await this.usersRepository.softDelete(userId);
   }
