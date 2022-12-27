@@ -13,6 +13,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/role.enum';
 import { LaundryDto } from 'src/laundries/dto/laundryDto';
+import { UpdateOrderDto } from 'src/orders/dto/update-order.dto';
 import { AdminService } from '../service/admin.service';
 
 @Controller('admin')
@@ -39,8 +40,8 @@ export class AdminController {
     return this.adminService.updatePartnerInfo(laundryId, laundryDto);
   }
 
-  @Delete('users')
-  async deleteUser(@Body('userId') userId: string) {
+  @Delete('users/:id')
+  async deleteUser(@Param('id') userId: string) {
     return this.adminService.deleteUser(userId);
   }
 
@@ -49,18 +50,16 @@ export class AdminController {
     return this.adminService.findAllOrders(email);
   }
 
-  @Delete('orders')
-  async deleteOrder(@Body('orderId') orderId: string) {
+  @Put('orders/:id')
+  async changeOrderStatus(
+    @Param('id') orderId: string,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
+    return this.adminService.updateOrderStatus(orderId, updateOrderDto);
+  }
+
+  @Delete('orders/:id')
+  async deleteOrder(@Param('id') orderId: string) {
     return this.adminService.deleteOrder(orderId);
-  }
-
-  @Get('products')
-  async getAllProducts() {
-    return this.adminService.findAllProducts();
-  }
-
-  @Delete('products')
-  async deleteProduct(@Body('productId') productId: string) {
-    return this.adminService.deleteProduct(productId);
   }
 }
