@@ -3,7 +3,7 @@ import { Role } from '../../common/enums/role.enum';
 import { User } from '../../users/users.entity';
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
-import { Wallet } from 'src/wallets/wallet.entity';
+import { Wallet } from '../../wallets/wallet.entity';
 
 export default class CreateInitialData implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
