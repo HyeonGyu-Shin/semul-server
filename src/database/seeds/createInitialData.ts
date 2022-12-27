@@ -3,6 +3,7 @@ import { Role } from '../../common/enums/role.enum';
 import { User } from '../../users/users.entity';
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
+import { Wallet } from 'src/wallets/wallet.entity';
 
 export default class CreateInitialData implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
@@ -30,6 +31,9 @@ export default class CreateInitialData implements Seeder {
       '도로3 앞 주택3',
       '33333',
     );
+
+    const wallet1 = Wallet.createEntityInstance();
+    const wallet2 = Wallet.createEntityInstance();
 
     await addressRepository.save(address1);
     await addressRepository.save(address2);
@@ -62,6 +66,9 @@ export default class CreateInitialData implements Seeder {
     user1.address = address1;
     user2.address = address2;
     user3.address = address3;
+
+    user1.wallet = wallet1;
+    user2.wallet = wallet2;
 
     await usersRepository.save(user1);
     await usersRepository.save(user2);
