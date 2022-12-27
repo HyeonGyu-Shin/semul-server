@@ -26,10 +26,9 @@ export class LaundriesRepository {
 
   async findAll(): Promise<Laundry[] | []> {
     return await this.laundriesRepository
-      .createQueryBuilder()
-      .select('*')
-      .from('laundry', 'l')
-      .getRawMany();
+      .createQueryBuilder('laundry')
+      .leftJoinAndSelect('laundry.address', 'address')
+      .getMany();
   }
 
   async findAllLaundries(): Promise<Laundry[] | []> {
