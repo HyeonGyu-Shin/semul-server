@@ -17,13 +17,27 @@ import { CurrentUser } from '../../common/decorators/user.decorator';
 import { User } from '../../users/users.entity';
 import { Order } from '../order.entity';
 import { UpdateOrderDto } from '../dto/update-order.dto';
+import {
+  ApiCreatedResponse,
+  ApiHeader,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('orders')
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Access Token',
+})
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
+  @ApiCreatedResponse({
+    description: 'The record has been successfully created.',
+  })
   async create(
     @Body() orderData: CreateOrderDto,
     @CurrentUser() currentUser: User,
@@ -33,12 +47,16 @@ export class OrdersController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getAll(@Query() dto: FilterOrderDto): Promise<Order[]> {
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  async getAll(
+    @Query() dto: FilterOrderDto,
+    @CurrentUser() currentUser: User,
+  ): Promise<Order[]> {
     if (dto.status) {
-      return await this.ordersService.findByStatus(dto.status);
+      return await this.ordersService.findByStatus(dto.status, currentUser);
     }
 
-    return await this.ordersService.findAll();
+    return await this.ordersService.findAll(currentUser);
   }
 
   @Get('/:id')

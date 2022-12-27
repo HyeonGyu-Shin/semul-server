@@ -73,9 +73,13 @@ export class OrdersService {
     }
   }
 
-  async findAll(): Promise<Order[]> {
+  async findAll(currentUser: User): Promise<Order[]> {
     const ordersWithProducts = [];
-    const orders = await this.ordersRepository.find();
+    const orders = await this.ordersRepository.find({
+      where: {
+        user: { id: currentUser.id },
+      },
+    });
 
     for (const order of orders) {
       const products = await this.orderProductsRepository.findBy({
@@ -98,8 +102,8 @@ export class OrdersService {
     return orderWithProducts;
   }
 
-  findByStatus(status: string): Promise<Order[]> {
-    return this.ordersRepository.findByStatus(status);
+  findByStatus(status: string, currentUser: User): Promise<Order[]> {
+    return this.ordersRepository.findByStatus(status, currentUser.id);
   }
 
   async updateOne(id: string, order: UpdateOrderDto) {

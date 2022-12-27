@@ -38,9 +38,12 @@ export class OrdersRepository extends Repository<Order> {
     return result;
   }
 
-  async findByStatus(status: string): Promise<Order[]> {
+  async findByStatus(status: string, userId: string): Promise<Order[]> {
     const result = await this.createQueryBuilder('order')
       .where('order.status = :status', { status: status })
+      .andWhere('order.userId = :userId', {
+        userId: userId,
+      })
       .getMany();
     return result;
   }
