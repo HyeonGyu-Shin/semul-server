@@ -13,9 +13,9 @@ export class ProductsService {
   constructor(private productsRepository: ProductsRepository) {}
 
   async create(productData: CreateProductDto[]) {
-    const product = await this.productsRepository.save(productData);
+    await this.productsRepository.save(productData);
 
-    return product;
+    return '상품이 생성되었습니다.';
   }
 
   findAll(): Promise<Product[]> {
@@ -48,9 +48,11 @@ export class ProductsService {
     }
 
     await this.productsRepository.update(id, product);
+    return '상품이 변경되었습니다.';
   }
 
   async deleteOne(id: string) {
     await this.productsRepository.softDelete(id);
+    return '상품이 삭제되었습니다.';
   }
 }
