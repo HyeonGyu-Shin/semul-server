@@ -5,17 +5,24 @@ import {
   Get,
   HttpCode,
   Param,
-  Patch,
   Post,
+  Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { Role } from 'src/common/enums/role.enum';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { FilterProductDto } from '../dto/filter-product.dto';
 import { Product } from '../product.entity';
 import { ProductsService } from '../service/products.service';
 import { UpdateProductDto } from './../dto/update-product.dto';
 
-@Controller('products')
+@Controller('admin/products')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Admin)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
@@ -38,7 +45,7 @@ export class ProductsController {
     return await this.productsService.findOne(productId);
   }
 
-  @Patch('/:id')
+  @Put('/:id')
   @HttpCode(204)
   async patchOne(
     @Param('id') productId: string,
