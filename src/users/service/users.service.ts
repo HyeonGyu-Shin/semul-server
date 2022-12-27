@@ -75,12 +75,14 @@ export class UsersService {
     const { queryRunner, manager } = await this.createQueryRunner();
 
     try {
-      const { roadAddr, detailAddr, jibun } = newUserInfo.address;
-      const address = await this.addressRepository.findOne(user.address);
-      address.roadAddr = roadAddr;
-      address.detailAddr = detailAddr;
-      address.jibun = jibun;
-      await this.addressRepository.updateOneInTransaction(manager, address);
+      if (newUserInfo.address) {
+        const address = await this.addressRepository.findOne(user.address);
+        const { roadAddr, detailAddr, jibun } = newUserInfo.address;
+        address.roadAddr = roadAddr;
+        address.detailAddr = detailAddr;
+        address.jibun = jibun;
+        await this.addressRepository.updateOneInTransaction(manager, address);
+      }
 
       await this.usersRepository.updateOne(user, newUserInfo);
 

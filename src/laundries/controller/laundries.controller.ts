@@ -16,6 +16,7 @@ import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { LaundryDto } from '../dto/laundryDto';
 import { Role } from 'src/common/enums/role.enum';
 import { User } from 'src/users/users.entity';
+import { UpdateLaundryDto } from '../dto/updateLaundryDto';
 
 @Controller('laundries')
 export class LaundriesController {
@@ -31,25 +32,23 @@ export class LaundriesController {
     return await this.laundriesService.createLaundry(currentUser, laundryDto);
   }
 
-  @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  async getLaundry(@Param('id') id: string) {
-    return await this.laundriesService.findLaundry(id);
-  }
-
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getAllLaundry() {
-    return await this.laundriesService.findAllLaundry();
+  async getAllLaundries() {
+    return this.laundriesService.findAllLaundry();
   }
 
   @Put()
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Partner)
   async modifyLaundry(
     @CurrentUser() currentUser: User,
-    @Body() laundryDto: LaundryDto,
+    @Body() updateLaundryDto: UpdateLaundryDto,
   ) {
-    return await this.laundriesService.updateLaundry(currentUser, laundryDto);
+    return await this.laundriesService.updateLaundry(
+      currentUser,
+      updateLaundryDto,
+    );
   }
 
   @Delete()
