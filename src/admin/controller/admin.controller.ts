@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
@@ -44,8 +45,8 @@ export class AdminController {
   }
 
   @Get('orders')
-  async getAllOrders() {
-    return 'get All orders';
+  async getAllOrders(@Query('email') email: string) {
+    return this.adminService.findAllOrders(email);
   }
 
   @Delete('orders')

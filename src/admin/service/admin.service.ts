@@ -26,6 +26,16 @@ export class AdminService {
     return await this.laundriesRepository.findAllLaundries();
   }
 
+  async findAllOrders(email: string) {
+    const { id } = await this.usersRepository.findOneByEmail(email);
+    console.log(id);
+    return await this.ordersRepository.find({
+      where: {
+        user: { id: id },
+      },
+    });
+  }
+
   async updatePartnerInfo(laundryId: string, laundryDto: LaundryDto) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
