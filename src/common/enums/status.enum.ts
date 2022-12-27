@@ -4,4 +4,5 @@ export enum Status {
   Laundry = 'LAUNDRY',
   Arrival = 'ARRIVAL',
   Complete = 'COMPLETE',
+  Cancel = 'CANCEL',
 }

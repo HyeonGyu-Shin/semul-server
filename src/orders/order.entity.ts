@@ -31,6 +31,9 @@ export class Order extends CommonEntity {
   @Column({ nullable: true })
   completedDateTime: Date;
 
+  @Column({ nullable: true })
+  cancelledDateTime: Date;
+
   @Column()
   orderNum: number;
 

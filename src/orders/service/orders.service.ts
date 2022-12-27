@@ -9,6 +9,7 @@ import { OrderProduct } from '../../order_products/order_product.entity';
 import { Order } from '../order.entity';
 import { LaundriesRepository } from './../../laundries/repository/laundries.repository';
 import { UpdateOrderDto } from '../dto/update-order.dto';
+import { Status } from '../../common/enums/status.enum';
 
 @Injectable()
 export class OrdersService {
@@ -113,6 +114,11 @@ export class OrdersService {
 
     if (!foundOrder)
       throw new NotFoundException(`Order with ID ${id} not found.`);
+
+    if (order.status === Status.Complete)
+      order = { ...order, completedDateTime: new Date() };
+    else if (order.status === Status.Cancel)
+      order = { ...order, cancelledDateTime: new Date() };
 
     await this.ordersRepository.update(id, order);
   }
