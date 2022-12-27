@@ -53,7 +53,12 @@ export class OrdersController {
     @CurrentUser() currentUser: User,
   ): Promise<Order[]> {
     if (dto.status) {
-      return await this.ordersService.findByStatus(dto.status, currentUser);
+      return await this.ordersService.findAllByStatus(dto.status, currentUser);
+    } else if (dto.laundryId) {
+      return await this.ordersService.findAllByLaundry(
+        dto.laundryId,
+        currentUser,
+      );
     }
 
     return await this.ordersService.findAll(currentUser);
