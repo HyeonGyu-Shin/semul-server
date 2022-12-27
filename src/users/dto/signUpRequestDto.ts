@@ -1,11 +1,7 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsNotEmptyObject,
-  IsObject,
-  IsString,
-} from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsEmail, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { Address } from 'src/address/address.entity';
+import { AddressDto } from 'src/address/dto/addressDto';
 import { Role } from 'src/common/enums/role.enum';
 import { User } from '../users.entity';
 
@@ -26,24 +22,21 @@ export class SignUpRequestDto {
   @IsNotEmpty()
   phoneNumber: string;
 
-  @IsString()
-  bizType: Role;
-
-  @IsObject()
-  @IsNotEmptyObject()
+  @ValidateNested()
+  @Type(() => AddressDto)
   address: {
     roadAddr: 'string';
     detailAddr: 'string';
     jibun: 'string';
   };
 
-  toUserEntity() {
+  toUserEntity(bizType: Role) {
     return User.createEntityInstance(
       this.email,
       this.password,
       this.name,
       this.phoneNumber,
-      this.bizType,
+      bizType,
     );
   }
 

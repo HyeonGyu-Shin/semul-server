@@ -16,6 +16,9 @@ export class Laundry extends CommonEntity {
   @Column()
   phoneNumber: string;
 
+  @Column()
+  isApprove: boolean;
+
   @OneToOne(() => User, (user) => user.laundry)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
