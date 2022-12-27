@@ -11,6 +11,7 @@ import { OrderProductsModule } from './order_products/order_products.module';
 import { laundriesModule } from './laundries/laundries.module';
 import { AdminModule } from './admin/admin.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { PartnersModule } from './partners/partners.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
     OrderProductsModule,
     laundriesModule,
     AdminModule,
+    PartnersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
