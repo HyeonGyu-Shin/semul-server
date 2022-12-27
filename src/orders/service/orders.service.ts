@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { OrdersRepository } from '../repository/orders.repository';
 import { ProductsRepository } from './../../products/repository/products.repository';
@@ -9,6 +13,8 @@ import { OrderProduct } from '../../order_products/order_product.entity';
 import { Order } from '../order.entity';
 import { LaundriesRepository } from './../../laundries/repository/laundries.repository';
 import { UpdateOrderDto } from '../dto/update-order.dto';
+import { Status } from '../../common/enums/status.enum';
+import { Role } from '../../common/enums/role.enum';
 
 @Injectable()
 export class OrdersService {
@@ -91,6 +97,21 @@ export class OrdersService {
     return ordersWithProducts;
   }
 
+  findAllByStatus(status: string, currentUser: User): Promise<Order[]> {
+    return this.ordersRepository.findAllByStatus(status, currentUser.id);
+  }
+
+  findAllByLaundry(laundryId: string, currentUser: User): Promise<Order[]> {
+    if (currentUser.bizType !== Role.Partner)
+      throw new BadRequestException(`Only Partner can be found.`);
+
+    return this.ordersRepository.find({
+      where: {
+        laundry: { id: laundryId },
+      },
+    });
+  }
+
   async findOne(id: string): Promise<Order> {
     const order = await this.ordersRepository.findOneBy({ id });
 
@@ -102,10 +123,6 @@ export class OrdersService {
     return orderWithProducts;
   }
 
-  findByStatus(status: string, currentUser: User): Promise<Order[]> {
-    return this.ordersRepository.findByStatus(status, currentUser.id);
-  }
-
   async updateOne(id: string, order: UpdateOrderDto) {
     const foundOrder = await this.ordersRepository.findOneBy({
       id,
@@ -113,6 +130,11 @@ export class OrdersService {
 
     if (!foundOrder)
       throw new NotFoundException(`Order with ID ${id} not found.`);
+
+    if (order.status === Status.Complete)
+      order = { ...order, completedDateTime: new Date() };
+    else if (order.status === Status.Cancel)
+      order = { ...order, cancelledDateTime: new Date() };
 
     await this.ordersRepository.update(id, order);
   }
