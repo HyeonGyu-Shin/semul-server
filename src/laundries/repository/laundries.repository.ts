@@ -28,6 +28,7 @@ export class LaundriesRepository {
     return await this.laundriesRepository
       .createQueryBuilder('laundry')
       .leftJoinAndSelect('laundry.address', 'address')
+      .where('laundry.isApprove = 1')
       .getMany();
   }
 
