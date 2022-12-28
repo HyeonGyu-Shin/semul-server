@@ -5,6 +5,7 @@ import { LaundryDto } from 'src/laundries/dto/laundryDto';
 import { LaundriesRepository } from 'src/laundries/repository/laundries.repository';
 import { UpdateOrderDto } from 'src/orders/dto/update-order.dto';
 import { OrdersRepository } from 'src/orders/repository/orders.repository';
+import { OrderProductsRepository } from 'src/order_products/repository/order_products.repository';
 import { ProductsRepository } from 'src/products/repository/products.repository';
 import { UsersRepository } from 'src/users/repository/users.repository';
 import { DataSource } from 'typeorm';
@@ -17,6 +18,7 @@ export class AdminService {
     private readonly productsRepository: ProductsRepository,
     private readonly addressRepository: AddressRepository,
     private readonly ordersRepository: OrdersRepository,
+    private readonly orderProductsRepository: OrderProductsRepository,
     private dataSource: DataSource,
   ) {}
 
@@ -29,13 +31,39 @@ export class AdminService {
   }
 
   async findAllOrders(email: string) {
-    const { id } = await this.usersRepository.findOneByEmail(email);
-    console.log(id);
-    return await this.ordersRepository.find({
+    const user = await this.usersRepository.findOneByEmail(email);
+
+    if (!user) throw new NotFoundException('유저를 찾을 수 없습니다.');
+
+    const ordersWithProducts = [];
+
+    if (!email) {
+      const orders = await this.ordersRepository.find();
+
+      for (const order of orders) {
+        const products = await this.orderProductsRepository.findBy({
+          orderId: order.id,
+        });
+        ordersWithProducts.push({ ...order, orderProducts: products });
+      }
+
+      return ordersWithProducts;
+    }
+
+    const orders = await this.ordersRepository.find({
       where: {
-        user: { id: id },
+        user: { id: user.id },
       },
     });
+
+    for (const order of orders) {
+      const products = await this.orderProductsRepository.findBy({
+        orderId: order.id,
+      });
+      ordersWithProducts.push({ ...order, orderProducts: products });
+    }
+
+    return ordersWithProducts;
   }
 
   async updatePartnerInfo(laundryId: string, laundryDto: LaundryDto) {
