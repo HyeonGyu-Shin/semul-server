@@ -37,11 +37,13 @@ export class Laundry extends CommonEntity {
     name: string,
     phoneNumber: string,
     bizNo: string,
+    isApprove: boolean,
   ) {
     const laundry = new Laundry();
     laundry.name = name;
     laundry.phoneNumber = phoneNumber;
     laundry.bizNo = bizNo;
+    laundry.isApprove = isApprove;
     return laundry;
   }
 }

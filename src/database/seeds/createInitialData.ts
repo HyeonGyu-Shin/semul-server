@@ -4,16 +4,22 @@ import { User } from '../../users/users.entity';
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 import { Wallet } from '../../wallets/wallet.entity';
+import { Laundry } from '../..//laundries/laundry.entity';
 
 export default class CreateInitialData implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
     const usersRepository = dataSource.getRepository(User);
     const addressRepository = dataSource.getRepository(Address);
+    const laundriesRepository = dataSource.getRepository(Laundry);
 
-    await this.createUsers(usersRepository, addressRepository);
+    await this.createUsers(
+      usersRepository,
+      addressRepository,
+      laundriesRepository,
+    );
   }
 
-  async createUsers(usersRepository, addressRepository) {
+  async createUsers(usersRepository, addressRepository, laundriesRepository) {
     const address1 = Address.createEntityInstance(
       '도로1',
       '도로1 앞 주택1',
@@ -32,12 +38,16 @@ export default class CreateInitialData implements Seeder {
       '33333',
     );
 
-    const wallet1 = Wallet.createEntityInstance();
-    const wallet2 = Wallet.createEntityInstance();
+    const laundryAddress1 = Address.createEntityInstance(
+      '세탁소1',
+      '세탁소1 앞 세탁소 1',
+      '44444',
+    );
 
     await addressRepository.save(address1);
     await addressRepository.save(address2);
     await addressRepository.save(address3);
+    await addressRepository.save(laundryAddress1);
 
     const user1 = User.createEntityInstance(
       'test1@user.com',
@@ -63,15 +73,29 @@ export default class CreateInitialData implements Seeder {
       Role.Admin,
     );
 
+    const wallet1 = Wallet.createEntityInstance();
+
+    const laundry1 = Laundry.createEntityInstance(
+      '크린토피아',
+      '063-0000-0000',
+      '132313',
+      true,
+    );
+
     user1.address = address1;
     user2.address = address2;
     user3.address = address3;
 
     user1.wallet = wallet1;
-    user2.wallet = wallet2;
+    user2.laundry = laundry1;
 
     await usersRepository.save(user1);
     await usersRepository.save(user2);
     await usersRepository.save(user3);
+
+    laundry1.address = laundryAddress1;
+    laundry1.user = user2;
+
+    await laundriesRepository.save(laundry1);
   }
 }

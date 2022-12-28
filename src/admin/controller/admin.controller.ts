@@ -14,8 +14,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from 'src/common/enums/role.enum';
-import { Status } from 'src/common/enums/status.enum';
-import { LaundryDto } from 'src/laundries/dto/laundryDto';
+import { UpdateLaundryDto } from 'src/laundries/dto/updateLaundryDto';
 import { UpdateOrderDto } from 'src/orders/dto/update-order.dto';
 import { CreateProductDto } from 'src/products/dto/create-product.dto';
 import { FilterProductDto } from 'src/products/dto/filter-product.dto';
@@ -38,22 +37,41 @@ export class AdminController {
     return this.adminService.findAllUsers();
   }
 
+  @Delete('users/:id')
+  async deleteUser(@Param('id') userId: string) {
+    return this.adminService.deleteUser(userId);
+  }
+
   @Get('partners')
-  async getAllPartners() {
+  async getAllPartners(@Query() query: { status: string }) {
+    if (query.status) {
+      const status = query.status === 'true' ? true : false;
+      return this.adminService.findfilterdPartners(status);
+    }
+
     return this.adminService.findAllPartners();
   }
 
   @Put('partners/:id')
   async changePartnerInfo(
     @Param('id') laundryId: string,
-    @Body() laundryDto: LaundryDto,
+    @Body() updateLaundryDto: UpdateLaundryDto,
   ) {
-    return this.adminService.updatePartnerInfo(laundryId, laundryDto);
+    return this.adminService.updatePartnerInfo(laundryId, updateLaundryDto);
   }
 
-  @Delete('users/:id')
-  async deleteUser(@Param('id') userId: string) {
-    return this.adminService.deleteUser(userId);
+  @Post('/partners/:id/approve')
+  async changeApprovePartner(
+    @Param('id') laundryId: string,
+    @Query() query: { status: string },
+  ) {
+    const status = query.status === 'false' ? false : true;
+    return this.adminService.approvePartner(laundryId, status);
+  }
+
+  @Delete('partners/:id')
+  async deleteLaundry(@Param('id') laundryId: string) {
+    return this.adminService.deleteLaundry(laundryId);
   }
 
   @Post('products')

@@ -27,18 +27,18 @@ export class PartnersController {
   async signUp(@Body() signUpRequestDto: SignUpRequestDto) {
     return await this.usersService.createUser(
       signUpRequestDto,
-      Role.TempPartner,
+      Role.BeforePartner,
     );
   }
 
   @Post('')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.TempPartner)
+  @Roles(Role.BeforePartner)
   async createLaundry(
     @CurrentUser() user: User,
     @Body() laundryDto: LaundryDto,
   ) {
     await this.laundriesService.createLaundry(user, laundryDto);
-    return await this.usersService.updateBizType(user, Role.Partner);
+    return await this.usersService.updateBizType(user, Role.TempPartner);
   }
 }
