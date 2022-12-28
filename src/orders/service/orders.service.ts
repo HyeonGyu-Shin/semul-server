@@ -97,19 +97,45 @@ export class OrdersService {
     return ordersWithProducts;
   }
 
-  findAllByStatus(status: string, currentUser: User): Promise<Order[]> {
-    return this.ordersRepository.findAllByStatus(status, currentUser.id);
+  async findAllByStatus(status: string, currentUser: User): Promise<Order[]> {
+    const ordersWithProducts = [];
+    const orders = await this.ordersRepository.findAllByStatus(
+      status,
+      currentUser.id,
+    );
+
+    for (const order of orders) {
+      const products = await this.orderProductsRepository.findBy({
+        orderId: order.id,
+      });
+      ordersWithProducts.push({ ...order, orderProducts: products });
+    }
+
+    return ordersWithProducts;
   }
 
-  findAllByLaundry(laundryId: string, currentUser: User): Promise<Order[]> {
+  async findAllByLaundry(
+    laundryId: string,
+    currentUser: User,
+  ): Promise<Order[]> {
     if (currentUser.bizType !== Role.Partner)
       throw new BadRequestException(`Only Partner can be found.`);
 
-    return this.ordersRepository.find({
+    const ordersWithProducts = [];
+    const orders = await this.ordersRepository.find({
       where: {
         laundry: { id: laundryId },
       },
     });
+
+    for (const order of orders) {
+      const products = await this.orderProductsRepository.findBy({
+        orderId: order.id,
+      });
+      ordersWithProducts.push({ ...order, orderProducts: products });
+    }
+
+    return ordersWithProducts;
   }
 
   async findOne(id: string): Promise<Order> {
