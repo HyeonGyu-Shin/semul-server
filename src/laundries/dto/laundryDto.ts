@@ -1,10 +1,5 @@
 import { Type } from 'class-transformer';
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { AddressDto } from 'src/address/dto/addressDto';
 import { Laundry } from '../laundry.entity';
 
@@ -30,6 +25,7 @@ export class LaundryDto {
       this.name,
       this.phoneNumber,
       this.bizNo,
+      false,
     );
   }
 }

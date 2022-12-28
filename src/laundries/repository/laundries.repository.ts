@@ -46,6 +46,13 @@ export class LaundriesRepository {
       .getOne();
   }
 
+  async findAllByStatus(status: boolean) {
+    return this.laundriesRepository.find({
+      relations: { user: true, address: true },
+      where: { isApprove: status },
+    });
+  }
+
   async updateOneByEm(manager: EntityManager, laundry: Laundry) {
     return await manager
       .createQueryBuilder()
@@ -54,6 +61,7 @@ export class LaundriesRepository {
         name: laundry.name,
         bizNo: laundry.bizNo,
         phoneNumber: laundry.phoneNumber,
+        isApprove: laundry.isApprove,
       })
       .where('id = :id', { id: laundry.id })
       .execute();

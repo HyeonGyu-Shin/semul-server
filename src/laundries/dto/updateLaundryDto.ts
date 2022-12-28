@@ -1,11 +1,13 @@
 import { Type } from 'class-transformer';
 import {
+  IsBoolean,
   IsNotEmpty,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { AddressDto } from 'src/address/dto/addressDto';
+import { Laundry } from '../laundry.entity';
 
 export class UpdateLaundryDto {
   @IsOptional()
@@ -27,4 +29,13 @@ export class UpdateLaundryDto {
   @IsString()
   @IsNotEmpty()
   bizNo: string;
+
+  toLaundryEntity() {
+    return Laundry.createEntityInstance(
+      this.name,
+      this.phoneNumber,
+      this.bizNo,
+      false,
+    );
+  }
 }

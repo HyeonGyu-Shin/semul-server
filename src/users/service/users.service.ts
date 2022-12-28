@@ -29,7 +29,7 @@ export class UsersService {
 
   async createUser(
     signUpRequestDto: SignUpRequestDto,
-    bizType: Role.User | Role.TempPartner,
+    bizType: Role.User | Role.BeforePartner,
   ) {
     const { queryRunner, manager } = await this.createQueryRunner();
 
