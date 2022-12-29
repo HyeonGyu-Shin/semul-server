@@ -47,6 +47,10 @@ export class UsersRepository {
     );
   }
 
+  async updateOneByEm(manager: EntityManager, user: User) {
+    return await manager.update(User, { id: user.id }, { name: user.name });
+  }
+
   async updateBizType(user: User, bizType: Role) {
     return await this.usersRepository.update({ id: user.id }, { bizType });
   }

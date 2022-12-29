@@ -41,6 +41,8 @@ export class LaundriesService {
     } catch (err) {
       await queryRunner.rollbackTransaction();
       return err;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -69,12 +71,14 @@ export class LaundriesService {
         await this.laundriesRepository.updateOneByEm(manager, foundLaundry);
       }
 
-      queryRunner.commitTransaction();
+      await queryRunner.commitTransaction();
 
       return '수정이 완료되었습니다.';
     } catch (err) {
-      queryRunner.rollbackTransaction();
+      await queryRunner.rollbackTransaction();
       return err;
+    } finally {
+      await queryRunner.release();
     }
   }
 

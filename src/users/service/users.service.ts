@@ -61,6 +61,8 @@ export class UsersService {
     } catch (err) {
       await queryRunner.rollbackTransaction();
       return err;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -88,14 +90,17 @@ export class UsersService {
         await this.addressRepository.updateOneInTransaction(manager, address);
       }
 
-      await this.usersRepository.updateOne(user, newUserInfo);
+      user.name = newUserInfo?.name ?? user.name;
+      await this.usersRepository.updateOneByEm(manager, user);
 
-      queryRunner.commitTransaction();
+      await queryRunner.commitTransaction();
 
       return '성공적으로 변경했습니다!';
     } catch (err) {
-      queryRunner.rollbackTransaction();
+      await queryRunner.rollbackTransaction();
       return err;
+    } finally {
+      await queryRunner.release();
     }
   }
 

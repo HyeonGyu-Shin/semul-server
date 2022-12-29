@@ -45,6 +45,8 @@ export class WalletsService {
     } catch (err) {
       await queryRunner.rollbackTransaction();
       return err;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -75,6 +77,8 @@ export class WalletsService {
     } catch (err) {
       await queryRunner.rollbackTransaction();
       return err;
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -99,6 +103,8 @@ export class WalletsService {
     } catch (err) {
       await queryRunner.rollbackTransaction();
       return err;
+    } finally {
+      await queryRunner.release();
     }
   }
 }
