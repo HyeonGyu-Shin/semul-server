@@ -37,6 +37,7 @@ export class OrdersService {
       const laundry = await this.laundriesRepository.findOne(
         orderData.laundryId,
       );
+      if (!laundry) throw new NotFoundException('세탁소를 찾을 수 없습니다.');
       const count = await this.ordersRepository.count();
       const { identifiers } = await this.ordersRepository.saveByTransaction(
         manager,
@@ -46,6 +47,9 @@ export class OrdersService {
         count,
       );
       const orderId = identifiers[0]['id'];
+
+      if (orderData.products.length < 1)
+        throw new BadRequestException(`elements are required in products.`);
 
       for (const product of orderData.products) {
         const { name, price } = await this.productsRepository.findOneBy({
@@ -73,7 +77,7 @@ export class OrdersService {
       return { id: orderId };
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      throw new NotFoundException();
+      throw err;
     } finally {
       await queryRunner.release();
     }
